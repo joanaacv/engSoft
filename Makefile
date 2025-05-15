@@ -8,5 +8,5 @@
 
 run-backend:
 	@echo "Running backend..."
-	@source venv/bin/activate && cd backend &&python manage.py runserver
+	@source venv/bin/activate && cd backend && python manage.py runserver
 	@echo "Backend is running."
