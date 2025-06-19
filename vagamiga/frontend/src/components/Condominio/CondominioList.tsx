@@ -9,17 +9,17 @@ import {
   TableRow,
 } from "@mui/material";
 import React from "react";
-import { Condominio } from "../../api/condominios";
+import { Condominium } from "../../api/condominiums";
 
 interface CondominioListProps {
-  condominios: Condominio[];
-  onEdit: (condominio: Condominio) => void;
+  condominiums: Condominium[];
+  onEdit: (condominio: Condominium) => void;
   onDelete: (id: number) => void;
   onViewDetails: (id: number) => void;
 }
 
-const CondominioList: React.FC<CondominioListProps> = ({
-  condominios,
+const CondominiumList: React.FC<CondominioListProps> = ({
+  condominiums,
   onEdit,
   onDelete,
   onViewDetails,
@@ -36,22 +36,22 @@ const CondominioList: React.FC<CondominioListProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {condominios.map((condominio) => (
-            <TableRow key={condominio.id}>
-              <TableCell>{condominio.nome}</TableCell>
-              <TableCell>{condominio.endereco}</TableCell>
-              <TableCell>R$ {condominio.preco_por_hora.toFixed(2)}</TableCell>
+          {condominiums.map((condominium) => (
+            <TableRow key={condominium.id}>
+              <TableCell>{condominium.name}</TableCell>
+              <TableCell>{condominium.adress}</TableCell>
+              <TableCell>R$ {condominium.hourly_rate.toFixed(2)}</TableCell>
               <TableCell>
                 <Button
                   color="primary"
-                  onClick={() => onViewDetails(condominio.id)}
+                  onClick={() => onViewDetails(condominium.id)}
                 >
                   Detalhes
                 </Button>
-                <Button color="secondary" onClick={() => onEdit(condominio)}>
+                <Button color="secondary" onClick={() => onEdit(condominium)}>
                   Editar
                 </Button>
-                <Button color="primary" onClick={() => onDelete(condominio.id)}>
+                <Button color="primary" onClick={() => onDelete(condominium.id)}>
                   Excluir
                 </Button>
               </TableCell>
@@ -63,4 +63,4 @@ const CondominioList: React.FC<CondominioListProps> = ({
   );
 };
 
-export default CondominioList;
+export default CondominiumList;

@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
-import { Vaga } from "../../api/vagas";
+import { Vaga } from "../../api/parkingspots";
 
 interface VagaCardProps {
   vaga: Vaga;

@@ -1,17 +1,16 @@
 import api from "./index";
 
 interface LoginData {
-  username: string;
+  email: string;
   password: string;
 }
 
 interface RegisterData {
-  username: string;
+  name: string;
   email: string;
   password: string;
-  user_type: string;
-  first_name: string;
-  last_name: string;
+  condominium_id?: number;  // opcional, se o backend permitir
+  is_admin?: boolean;
 }
 
 export const login = (data: LoginData) => api.post("auth/", data);

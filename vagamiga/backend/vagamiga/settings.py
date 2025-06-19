@@ -58,8 +58,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'vagamiga',
-        'USER': 'vagamiga',
-        'PASSWORD': '123',
+        'USER': 'admin',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
     }

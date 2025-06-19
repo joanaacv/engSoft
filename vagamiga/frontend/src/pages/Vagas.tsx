@@ -10,20 +10,20 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
-  createVaga,
-  deleteVaga,
-  getVagas,
-  updateVaga,
-  Vaga,
-} from "../api/vagas";
+  createParkingSpot,
+  deleteParkingSpot,
+  getParkingSpots,
+  updateParkingSpot,
+  ParkingSpot,
+} from "../api/parkingspots";
 import VagaCard from "../components/Vaga/VagaCard";
 import VagaForm from "../components/Vaga/VagaForm";
 import { useAuth } from "../contexts/AuthContext";
 
 const VagasPage: React.FC = () => {
-  const [vagas, setVagas] = useState<Vaga[]>([]);
+  const [vagas, setVagas] = useState<ParkingSpot[]>([]);
   const [openForm, setOpenForm] = useState(false);
-  const [currentVaga, setCurrentVaga] = useState<Vaga | null>(null);
+  const [currentVaga, setCurrentVaga] = useState<ParkingSpot | null>(null);
   const [search, setSearch] = useState("");
   const { user } = useAuth();
   const [inicio, setInicio] = useState("");
@@ -35,15 +35,15 @@ const VagasPage: React.FC = () => {
   }, []);
 
   const fetchVagas = async () => {
-    const data = await getVagas();
+    const data = await getParkingSpots();
     setVagas(data);
   };
 
   const handleSubmit = async (data: any) => {
     if (currentVaga) {
-      await updateVaga(currentVaga.id, data);
+      await updateParkingSpot(currentVaga.id, data);
     } else {
-      await createVaga(data);
+      await createParkingSpot(data);
     }
     fetchVagas();
     setOpenForm(false);
@@ -51,28 +51,28 @@ const VagasPage: React.FC = () => {
   };
 
   const handleClaim = async (id: number) => {
-    await updateVaga(id, { disponivel: true });
+    await updateParkingSpot(id, { disponivel: true });
     fetchVagas();
   };
 
-  const handleEdit = (vaga: Vaga) => {
+  const handleEdit = (vaga: ParkingSpot) => {
     setCurrentVaga(vaga);
     setOpenForm(true);
   };
 
   const handleDelete = async (id: number) => {
-    await deleteVaga(id);
+    await deleteParkingSpot(id);
     fetchVagas();
   };
 
   const filteredVagas = vagas.filter((vaga) =>
-    vaga.numero.toString().toLowerCase().includes(search)
+    vaga.spot_name.toString().toLowerCase().includes(search)
   );
 
   const [confirmClaimId, setConfirmClaimId] = useState<number | null>(null);
 
   const handleUpdateStatus = async (id: number, disponivel: boolean) => {
-    await updateVaga(id, { disponivel: disponivel });
+    await updateParkingSpot(id, { disponivel: disponivel });
     fetchVagas();
   };
 

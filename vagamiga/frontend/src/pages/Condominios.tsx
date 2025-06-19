@@ -13,7 +13,7 @@ import {
   deleteCondominio,
   getCondominios,
   updateCondominio,
-} from "../api/condominios";
+} from "../api/condominiums";
 import CondominioForm from "../components/Condominio/CondominioForm";
 import CondominioList from "../components/Condominio/CondominioList";
 import { useAuth } from "../contexts/AuthContext";

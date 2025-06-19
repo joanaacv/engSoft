@@ -2,13 +2,38 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth import get_user_model
-from .models import Condominio, Vaga, Locacao, Relatorio
-from .serializers import UserSerializer, CondominioSerializer, VagaSerializer, LocacaoSerializer, RelatorioSerializer
+from .models import Condominium, User, Resident, ParkingSpot, Report
+from .serializers import CondominiumSerializer, UserSerializer, ResidentSerializer, ParkingSpotSerializer, ReportSerializer
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
 
+class CondominiumViewSet(viewsets.ModelViewSet):
+    queryset = Condominium.objects.all()
+    serializer_class = CondominiumSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class ResidentViewSet(viewsets.ModelViewSet):
+    queryset = Resident.objects.all()
+    serializer_class = ResidentSerializer
+
+
+class ParkingSpotViewSet(viewsets.ModelViewSet):
+    queryset = ParkingSpot.objects.all()
+    serializer_class = ParkingSpotSerializer
+
+
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+"""
 User = get_user_model()
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -24,6 +49,7 @@ class SimpleAuthView(APIView):
         if user is not None:
             return Response(UserSerializer(user).data)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 class CondominioViewSet(viewsets.ModelViewSet):
     queryset = Condominio.objects.all()
     serializer_class = CondominioSerializer
@@ -115,3 +141,6 @@ class RelatorioViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Relatorio.objects.all()
     serializer_class = RelatorioSerializer
     # permission_classes = [IsAuthenticated]
+
+
+"""

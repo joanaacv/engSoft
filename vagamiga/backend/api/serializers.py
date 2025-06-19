@@ -1,43 +1,34 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Condominio, Vaga, Locacao, Relatorio
+from .models import Condominium, User, Resident, ParkingSpot, Report
 
-User = get_user_model()
+
+class CondominiumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Condominium
+        fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'user_type', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            user_type=validated_data.get('user_type', ''),
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', ''),
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-
-class CondominioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Condominio
         fields = '__all__'
 
-class VagaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Vaga
-        fields = ['id', 'numero', 'disponivel', 'condominio', 'proprietario']
 
-class LocacaoSerializer(serializers.ModelSerializer):
+class ResidentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
-        model = Locacao
+        model = Resident
         fields = '__all__'
 
-class RelatorioSerializer(serializers.ModelSerializer):
+
+class ParkingSpotSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Relatorio
+        model = ParkingSpot
+        fields = '__all__'
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
         fields = '__all__'
