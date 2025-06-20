@@ -1,44 +1,46 @@
 import api from "./index";
+import { Resident } from "./residents";
+import { ParkingSpot } from "./parkingspots";
 
-export interface Locacao {
+export interface Report {
   id: number;
-  vaga: number;
-  locador: number;
-  locatario: number;
-  data_inicio: string;
-  data_fim: string;
-  valor_total: number;
-  pago: boolean;
+  landlord: Resident;
+  tenant: Resident;
+  spot: ParkingSpot;
+  start_date: string; // formato ISO: 'YYYY-MM-DD'
+  end_date: string;
+  payment_confirmed: boolean;
+  amount: number; // ou number, dependendo da conversão no backend
 }
 
-export const getLocacoes = async (): Promise<Locacao[]> => {
-  const response = await api.get("locacoes/");
+export const getReports = async (): Promise<Report[]> => {
+  const response = await api.get("report/");
   return response.data;
 };
 
-export const getLocacao = async (id: number): Promise<Locacao> => {
-  const response = await api.get(`locacoes/${id}/`);
+export const getReport = async (id: number): Promise<Report> => {
+  const response = await api.get(`report/${id}/`);
   return response.data;
 };
 
-export const createLocacao = async (
-  data: Omit<Locacao, "id">
-): Promise<Locacao> => {
-  const response = await api.post("locacoes/", data);
+export const createReport = async (
+  data: Omit<Report, "id">
+): Promise<Report> => {
+  const response = await api.post("report/", data);
   return response.data;
 };
 
-export const payLocacao = async (id: number): Promise<Locacao> => {
-  const response = await api.post(`locacoes/${id}/pay/`);
+export const payReport = async (id: number): Promise<Report> => {
+  const response = await api.post(`report/${id}/pay/`);
   return response.data;
 };
 
-export const getMinhasLocacoes = async (): Promise<Locacao[]> => {
-  const response = await api.get("locacoes/minhas/");
+export const getMyReports = async (): Promise<Report[]> => {
+  const response = await api.get("report/my_reports/");
   return response.data;
 };
 
-export const getLocacoesComoLocador = async (): Promise<Locacao[]> => {
-  const response = await api.get("locacoes/como_locador/");
+export const getReportsAsTenant = async (): Promise<Report[]> => {
+  const response = await api.get("report/as_tenant/");
   return response.data;
 };

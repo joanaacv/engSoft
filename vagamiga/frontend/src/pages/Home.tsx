@@ -1,8 +1,8 @@
 import {
-  Apartment as CondominioIcon,
-  Receipt as LocacaoIcon,
+  Apartment as CondominiumIcon,
+  Receipt as ReportIcon,
   Person as UserIcon,
-  LocalParking as VagaIcon,
+  LocalParking as ParkingSpotIcon,
 } from "@mui/icons-material";
 import {
   Box,
@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
 
   const features = [
     {
-      icon: <CondominioIcon fontSize="large" color="primary" />,
+      icon: <CondominiumIcon fontSize="large" color="primary" />,
       title: "Gerenciamento de Condomínios",
       description:
         "Cadastre e gerencie todos os condomínios associados à plataforma.",
@@ -35,7 +35,7 @@ const HomePage: React.FC = () => {
       path: "/condominios",
     },
     {
-      icon: <VagaIcon fontSize="large" color="primary" />,
+      icon: <ParkingSpotIcon fontSize="large" color="primary" />,
       title: "Controle de Vagas",
       description:
         "Registre e acompanhe todas as vagas de estacionamento disponíveis.",
@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
       path: "/vagas",
     },
     {
-      icon: <LocacaoIcon fontSize="large" color="primary" />,
+      icon: <ReportIcon fontSize="large" color="primary" />,
       title: "Sistema de Locações",
       description:
         "Gerencie as locações de vagas entre moradores do condomínio.",

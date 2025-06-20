@@ -1,34 +1,27 @@
 import api from "./index";
+import { User } from "./users";
 
-export interface Relatorio {
+export interface Resident {
   id: number;
-  locacao: number;
-  data_geracao: string;
-  conteudo: string;
+  balance: number;
+  user: User;
 }
 
-export const getRelatorios = async (): Promise<Relatorio[]> => {
-  const response = await api.get("relatorios/");
+export const getResidents = async (): Promise<Resident[]> => {
+  const response = await api.get("resident/");
   return response.data;
 };
 
-export const getRelatoriosCondominio = async (
-  condominioId: number
-): Promise<Relatorio[]> => {
-  const response = await api.get(`relatorios/?condominio=${condominioId}`);
+export const getResidentById = async (id: number): Promise<Resident> => {
+  const response = await api.get(`resident/${id}/`);
   return response.data;
 };
 
-export const getRelatorio = async (id: number): Promise<Relatorio> => {
-  const response = await api.get(`relatorios/${id}/`);
+export const createResident = async (resident: Omit<Resident, "id">): Promise<Resident> => {
+  const response = await api.post("resident/", resident);
   return response.data;
 };
 
-export const generateRelatorio = async (
-  locacaoId: number
-): Promise<Relatorio> => {
-  const response = await api.post(`relatorios/gerar/`, {
-    locacao_id: locacaoId,
-  });
-  return response.data;
+export const deleteResident = async (id: number): Promise<void> => {
+  await api.delete(`resident/${id}/`);
 };

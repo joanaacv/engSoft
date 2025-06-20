@@ -11,14 +11,14 @@ import {
 import React from "react";
 import { Condominium } from "../../api/condominiums";
 
-interface CondominioListProps {
+interface CondominiumListProps {
   condominiums: Condominium[];
   onEdit: (condominio: Condominium) => void;
   onDelete: (id: number) => void;
   onViewDetails: (id: number) => void;
 }
 
-const CondominiumList: React.FC<CondominioListProps> = ({
+const CondominiumList: React.FC<CondominiumListProps> = ({
   condominiums,
   onEdit,
   onDelete,

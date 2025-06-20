@@ -1,16 +1,6 @@
-export interface Condominio {
+export interface Condominium {
   id: number;
-  nome: string;
-  endereco: string;
-  telefone: string;
-  email: string;
-  data_cadastro: string;
-  data_atualizacao: string;
-  locadores: number[];
-  vagas: number[];
-  locacoes: number[];
-  locatarios: number[];
-  alugueis: number[];
-  anuncios: number[];
-  anuncios_vagas: number[];
+  name: string;
+  adress: string;
+  hourly_rate: number;
 }

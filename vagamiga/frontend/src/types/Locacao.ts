@@ -1,8 +1,10 @@
-export interface Locacao {
-    vaga: number;
-    locatario: number;
-    data_inicio: string;
-    data_fim: string;
-    valor_pago: number;
-  }
-  
+export interface Report {
+  id: number;
+  landlord: number;
+  tenant: number;
+  spot: number;
+  start_date: string; // formato ISO: 'YYYY-MM-DD'
+  end_date: string;
+  payment_confirmed: boolean;
+  amount: number; // ou number, dependendo da conversão no backend
+}

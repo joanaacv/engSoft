@@ -33,14 +33,6 @@ class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
-"""
-User = get_user_model()
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
 class SimpleAuthView(APIView):
     def post(self, request):
         username = request.data.get('username')
@@ -49,6 +41,16 @@ class SimpleAuthView(APIView):
         if user is not None:
             return Response(UserSerializer(user).data)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+"""
+User = get_user_model()
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 
 class CondominioViewSet(viewsets.ModelViewSet):
     queryset = Condominio.objects.all()

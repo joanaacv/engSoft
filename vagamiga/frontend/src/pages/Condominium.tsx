@@ -8,52 +8,52 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
-  Condominio,
-  createCondominio,
-  deleteCondominio,
-  getCondominios,
-  updateCondominio,
+  Condominium,
+  createCondominium,
+  deleteCondominium,
+  getCondominiums,
+  updateCondominium,
 } from "../api/condominiums";
-import CondominioForm from "../components/Condominio/CondominioForm";
-import CondominioList from "../components/Condominio/CondominioList";
+import CondominiumForm from "../components/Condominium/CondominiumForm";
+import CondominiumList from "../components/Condominium/CondominiumList";
 import { useAuth } from "../contexts/AuthContext";
 
-const CondominiosPage: React.FC = () => {
-  const [condominios, setCondominios] = useState<Condominio[]>([]);
+const CondominiumsPage: React.FC = () => {
+  const [condominiums, setCondominiums] = useState<Condominium[]>([]);
   const [openForm, setOpenForm] = useState(false);
-  const [currentCondominio, setCurrentCondominio] = useState<Condominio | null>(
+  const [currentCondominium, setCurrentCondominium] = useState<Condominium | null>(
     null
   );
   const { user } = useAuth();
 
   useEffect(() => {
-    fetchCondominios();
+    fetchCondominiums();
   }, []);
 
-  const fetchCondominios = async () => {
-    const data = await getCondominios();
-    setCondominios(data);
+  const fetchCondominiums = async () => {
+    const data = await getCondominiums();
+    setCondominiums(data);
   };
 
   const handleSubmit = async (data: any) => {
-    if (currentCondominio) {
-      await updateCondominio(currentCondominio.id, data);
+    if (currentCondominium) {
+      await updateCondominium(currentCondominium.id, data);
     } else {
-      await createCondominio(data);
+      await createCondominium(data);
     }
-    fetchCondominios();
+    fetchCondominiums();
     setOpenForm(false);
-    setCurrentCondominio(null);
+    setCurrentCondominium(null);
   };
 
-  const handleEdit = (condominio: Condominio) => {
-    setCurrentCondominio(condominio);
+  const handleEdit = (condominium: Condominium) => {
+    setCurrentCondominium(condominium);
     setOpenForm(true);
   };
 
   const handleDelete = async (id: number) => {
-    await deleteCondominio(id);
-    fetchCondominios();
+    await deleteCondominium(id);
+    fetchCondominiums();
   };
 
   const handleViewDetails = (id: number) => {
@@ -81,8 +81,8 @@ const CondominiosPage: React.FC = () => {
         )}
       </Box>
 
-      <CondominioList
-        condominios={condominios}
+      <CondominiumList
+        condominiums={condominiums}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onViewDetails={handleViewDetails}
@@ -90,11 +90,11 @@ const CondominiosPage: React.FC = () => {
 
       <Dialog open={openForm} onClose={() => setOpenForm(false)}>
         <DialogTitle>
-          {currentCondominio ? "Editar Condomínio" : "Adicionar Condomínio"}
+          {currentCondominium ? "Editar Condomínio" : "Adicionar Condomínio"}
         </DialogTitle>
         <DialogContent>
-          <CondominioForm
-            initialValues={currentCondominio || undefined}
+          <CondominiumForm
+            initialValues={currentCondominium || undefined}
             onSubmit={handleSubmit}
           />
         </DialogContent>
@@ -103,4 +103,4 @@ const CondominiosPage: React.FC = () => {
   );
 };
 
-export default CondominiosPage;
+export default CondominiumsPage;

@@ -11,13 +11,13 @@ import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
 
-import Condominios from "./pages/Condominios";
+import Condominios from "./pages/Condominium";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import Locacoes from "./pages/Locacoes";
+import Locacoes from "./pages/Reports";
 import Profile from "./pages/Profile";
-import Relatorios from "./pages/Relatorios";
-import Vagas from "./pages/Vagas";
+import Relatorios from "./pages/Residents";
+import Vagas from "./pages/ParkingSpots";
 
 const App: React.FC = () => (
   <ThemeProvider theme={theme}>

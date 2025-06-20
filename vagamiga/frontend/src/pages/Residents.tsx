@@ -10,20 +10,20 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getRelatorios, Relatorio } from "../api/relatorios";
+import { getResidents, getResidentById, Resident } from "../api/residents";
 import { useAuth } from "../contexts/AuthContext";
 
-const RelatoriosPage: React.FC = () => {
-  const [relatorios, setRelatorios] = useState<Relatorio[]>([]);
+const ResidentsPage: React.FC = () => {
+  const [residents, setResidents] = useState<Resident[]>([]);
   const { user } = useAuth();
 
   useEffect(() => {
-    fetchRelatorios();
+    fetchResidents();
   }, []);
 
-  const fetchRelatorios = async () => {
-    const data = await getRelatorios();
-    setRelatorios(data);
+  const fetchResidents = async () => {
+    const data = await getResidents();
+    setResidents(data);
   };
 
   return (
@@ -42,12 +42,9 @@ const RelatoriosPage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {relatorios.map((relatorio) => (
-              <TableRow key={relatorio.id}>
-                <TableCell>{relatorio.locacao}</TableCell>
-                <TableCell>
-                  {new Date(relatorio.data_geracao).toLocaleString()}
-                </TableCell>
+            {residents.map((resident) => (
+              <TableRow key={resident.id}>
+                <TableCell>{resident.balance}</TableCell>
                 <TableCell>
                   <Box
                     component="div"
@@ -56,7 +53,7 @@ const RelatoriosPage: React.FC = () => {
                     textOverflow="ellipsis"
                     overflow="hidden"
                   >
-                    {relatorio.conteudo}
+                    {resident.user.name}
                   </Box>
                 </TableCell>
               </TableRow>
@@ -68,4 +65,4 @@ const RelatoriosPage: React.FC = () => {
   );
 };
 
-export default RelatoriosPage;
+export default ResidentsPage;

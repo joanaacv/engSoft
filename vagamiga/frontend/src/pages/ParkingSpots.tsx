@@ -16,14 +16,14 @@ import {
   updateParkingSpot,
   ParkingSpot,
 } from "../api/parkingspots";
-import VagaCard from "../components/Vaga/VagaCard";
-import VagaForm from "../components/Vaga/VagaForm";
+import ParkingSpotCard from "../components/ParkingSpot/ParkingSpotCard";
+import ParkingSpotForm from "../components/ParkingSpot/ParkingSpotForm";
 import { useAuth } from "../contexts/AuthContext";
 
-const VagasPage: React.FC = () => {
-  const [vagas, setVagas] = useState<ParkingSpot[]>([]);
+const ParkingSpotPage: React.FC = () => {
+  const [parkingspots, setVagas] = useState<ParkingSpot[]>([]);
   const [openForm, setOpenForm] = useState(false);
-  const [currentVaga, setCurrentVaga] = useState<ParkingSpot | null>(null);
+  const [currentparkingspot, setCurrentVaga] = useState<ParkingSpot | null>(null);
   const [search, setSearch] = useState("");
   const { user } = useAuth();
   const [inicio, setInicio] = useState("");
@@ -40,19 +40,14 @@ const VagasPage: React.FC = () => {
   };
 
   const handleSubmit = async (data: any) => {
-    if (currentVaga) {
-      await updateParkingSpot(currentVaga.id, data);
+    if (currentparkingspot) {
+      await updateParkingSpot(currentparkingspot.id, data);
     } else {
       await createParkingSpot(data);
     }
     fetchVagas();
     setOpenForm(false);
     setCurrentVaga(null);
-  };
-
-  const handleClaim = async (id: number) => {
-    await updateParkingSpot(id, { disponivel: true });
-    fetchVagas();
   };
 
   const handleEdit = (vaga: ParkingSpot) => {
@@ -65,16 +60,11 @@ const VagasPage: React.FC = () => {
     fetchVagas();
   };
 
-  const filteredVagas = vagas.filter((vaga) =>
-    vaga.spot_name.toString().toLowerCase().includes(search)
+  const filteredVagas = parkingspots.filter((parkingspot) =>
+    parkingspot.spot_name.toString().toLowerCase().includes(search)
   );
 
   const [confirmClaimId, setConfirmClaimId] = useState<number | null>(null);
-
-  const handleUpdateStatus = async (id: number, disponivel: boolean) => {
-    await updateParkingSpot(id, { disponivel: disponivel });
-    fetchVagas();
-  };
 
   return (
     <>
@@ -107,30 +97,13 @@ const VagasPage: React.FC = () => {
           />
         </Box>
 
-        <Grid container spacing={3}>
-          {filteredVagas.map((vaga) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={vaga.id}>
-              <VagaCard
-                vaga={vaga}
-                onClaim={
-                  !vaga.disponivel && vaga.proprietario === user?.id
-                    ? () => handleClaim(vaga.id)
-                    : undefined
-                }
-                onAlugar={() => handleUpdateStatus(vaga.id, !vaga.disponivel)}
-                isOwner={vaga.proprietario === user?.id}
-              />
-            </Grid>
-          ))}
-        </Grid>
-
-        <Dialog open={openForm} onClose={() => setOpenForm(false)}>
+[        <Dialog open={openForm} onClose={() => setOpenForm(false)}>
           <DialogTitle>
-            {currentVaga ? "Editar Vaga" : "Adicionar Vaga"}
+            {currentparkingspot ? "Editar Vaga" : "Adicionar Vaga"}
           </DialogTitle>
           <DialogContent>
-            <VagaForm
-              initialValues={currentVaga || undefined}
+            <ParkingSpotForm
+              initialValues={currentparkingspot || undefined}
               onSubmit={handleSubmit}
             />
           </DialogContent>
@@ -140,4 +113,4 @@ const VagasPage: React.FC = () => {
   );
 };
 
-export default VagasPage;
+export default ParkingSpotPage;

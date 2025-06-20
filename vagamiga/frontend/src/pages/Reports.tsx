@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
-  getLocacoesComoLocador,
-  getMinhasLocacoes,
-  Locacao,
-} from "../api/locacoes";
+  getReportsAsTenant,
+  getMyReports,
+  Report,
+} from "../api/reports";
 import { useAuth } from "../contexts/AuthContext";
 
-const LocacoesPage: React.FC = () => {
-  const [locacoes, setLocacoes] = useState<Locacao[]>([]);
+const ReportsPage: React.FC = () => {
+  const [reports, setReports] = useState<Report[]>([]);
   const [viewAs, setViewAs] = useState<"locatario" | "locador">("locatario");
   const { user } = useAuth();
 
@@ -28,13 +28,13 @@ const LocacoesPage: React.FC = () => {
   }, [viewAs]);
 
   const fetchLocacoes = async () => {
-    let data: Locacao[];
+    let data: Report[];
     if (viewAs === "locatario") {
-      data = await getMinhasLocacoes();
+      data = await getMyReports();
     } else {
-      data = await getLocacoesComoLocador();
+      data = await getReportsAsTenant();
     }
-    setLocacoes(data);
+    setReports(data);
   };
 
   return (
@@ -79,18 +79,18 @@ const LocacoesPage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {locacoes.map((locacao) => (
-              <TableRow key={locacao.id}>
-                <TableCell>Vaga {locacao.vaga}</TableCell>
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell>Vaga {report.spot.spot_name}</TableCell>
                 <TableCell>
-                  {viewAs === "locatario" ? locacao.locador : locacao.locatario}
+                  {viewAs === "locatario" ? report.landlord.user.name : report.tenant.user.name}
                 </TableCell>
                 <TableCell>
-                  {new Date(locacao.data_inicio).toLocaleString()} -{" "}
-                  {new Date(locacao.data_fim).toLocaleString()}
+                  {new Date(report.start_date).toLocaleString()} -{" "}
+                  {new Date(report.end_date).toLocaleString()}
                 </TableCell>
-                <TableCell>R$ {locacao.valor_total.toFixed(2)}</TableCell>
-                <TableCell>{locacao.pago ? "Pago" : "Pendente"}</TableCell>
+                <TableCell>R$ {report.amount.toFixed(2)}</TableCell>
+                <TableCell>{report.payment_confirmed ? "Pago" : "Pendente"}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -100,4 +100,4 @@ const LocacoesPage: React.FC = () => {
   );
 };
 
-export default LocacoesPage;
+export default ReportsPage;

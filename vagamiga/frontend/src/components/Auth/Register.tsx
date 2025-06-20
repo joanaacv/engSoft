@@ -12,12 +12,13 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
-    user_type: "locatario",
-    first_name: "",
-    last_name: "",
+    condominium: "",
+    is_admin: "",
+    created_at: "",
+    updated_at: "",
   });
   const { register, error } = useAuth();
   const navigate = useNavigate();
@@ -49,9 +50,9 @@ const Register: React.FC = () => {
             margin="normal"
             required
             fullWidth
-            label="Username"
-            name="username"
-            value={formData.username}
+            label="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
           />
           <TextField
@@ -74,26 +75,6 @@ const Register: React.FC = () => {
             name="password"
             type="password"
             value={formData.password}
-            onChange={handleChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="First Name"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Last Name"
-            name="last_name"
-            value={formData.last_name}
             onChange={handleChange}
           />
           {error && (

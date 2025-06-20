@@ -9,21 +9,21 @@ export default function AnunciarVaga() {
       <form>
         <TextField
           label="Condomínio"
-          name="condominio"
+          name="condominium"
           fullWidth
           margin="normal"
           slotProps={{ inputLabel: { shrink: true } }}
         />
         <TextField
           label="Endereço"
-          name="endereco"
+          name="adress"
           fullWidth
           margin="normal"
           slotProps={{ inputLabel: { shrink: true } }}
         />
         <TextField
           label="Início"
-          name="data_inicio"
+          name="start_date"
           type="datetime-local"
           fullWidth
           margin="normal"
@@ -31,7 +31,7 @@ export default function AnunciarVaga() {
         />
         <TextField
           label="Fim"
-          name="data_fim"
+          name="end_date"
           type="datetime-local"
           fullWidth
           margin="normal"

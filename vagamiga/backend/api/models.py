@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext_lazy as _
 
+
 class Condominium(models.Model):
     name = models.CharField(max_length=100)
     adress = models.TextField()
@@ -17,8 +18,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=255)  # Deve ser criptografada
     condominium = models.ForeignKey(Condominium, on_delete=models.SET_NULL, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     # Evita conflito com o auth.User padrão
     """

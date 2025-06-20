@@ -1,10 +1,9 @@
-export interface Vaga {
-    id: number;
-    condominio: number;
-    locador: number; 
-    identificacao: string;
-    data_inicio: string; 
-    data_fim: string;
-    disponivel: boolean;
+export interface ParkingSpot {
+  id: number;
+  spot_name: string;
+  condominium: number; // ou Condominium se quiser expandido
+  for_rent: boolean;
+  owner: number | null; // ou Resident se quiser expandido
 }
+
   

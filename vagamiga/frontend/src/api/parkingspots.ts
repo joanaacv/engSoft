@@ -10,13 +10,13 @@ export interface ParkingSpot {
 
 // Buscar todas as vagas
 export const getParkingSpots = async (): Promise<ParkingSpot[]> => {
-  const response = await api.get("/parkingspots/");
+  const response = await api.get("/parkingspot/");
   return response.data;
 };
 
 // Buscar uma vaga específica
 export const getParkingSpot = async (id: number): Promise<ParkingSpot> => {
-  const response = await api.get(`/parkingspots/${id}/`);
+  const response = await api.get(`/parkingspot/${id}/`);
   return response.data;
 };
 
@@ -24,7 +24,7 @@ export const getParkingSpot = async (id: number): Promise<ParkingSpot> => {
 export const createParkingSpot = async (
   data: Omit<ParkingSpot, "id">
 ): Promise<ParkingSpot> => {
-  const response = await api.post("/parkingspots/", data);
+  const response = await api.post("/parkingspot/", data);
   return response.data;
 };
 
@@ -33,11 +33,11 @@ export const updateParkingSpot = async (
   id: number,
   data: Partial<ParkingSpot>
 ): Promise<ParkingSpot> => {
-  const response = await api.patch(`/parkingspots/${id}/`, data);
+  const response = await api.patch(`/parkingspot/${id}/`, data);
   return response.data;
 };
 
 // Deletar uma vaga
 export const deleteParkingSpot = async (id: number): Promise<void> => {
-  await api.delete(`/parkingspots/${id}/`);
+  await api.delete(`/parkingspot/${id}/`);
 };

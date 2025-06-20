@@ -13,13 +13,13 @@ export interface User {
 
 // Buscar todos os usuários
 export const getUsers = async (): Promise<User[]> => {
-  const response = await api.get("/users/");
+  const response = await api.get("/user/");
   return response.data;
 };
 
 // Buscar usuário por ID
 export const getUser = async (id: number): Promise<User> => {
-  const response = await api.get(`/users/${id}/`);
+  const response = await api.get(`/user/${id}/`);
   return response.data;
 };
 
@@ -27,7 +27,7 @@ export const getUser = async (id: number): Promise<User> => {
 export const createUser = async (
   data: Omit<User, "id" | "created_at" | "updated_at">
 ): Promise<User> => {
-  const response = await api.post("/users/", data);
+  const response = await api.post("/user/", data);
   return response.data;
 };
 
@@ -36,11 +36,11 @@ export const updateUser = async (
   id: number,
   data: Partial<User>
 ): Promise<User> => {
-  const response = await api.patch(`/users/${id}/`, data);
+  const response = await api.patch(`/user/${id}/`, data);
   return response.data;
 };
 
 // Deletar usuário
 export const deleteUser = async (id: number): Promise<void> => {
-  await api.delete(`/users/${id}/`);
+  await api.delete(`/user/${id}/`);
 };
