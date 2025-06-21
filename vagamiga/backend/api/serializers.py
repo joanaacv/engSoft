@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 from .models import Condominiums, Users, Residents, ParkingSpots, Reports
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CondominiumsSerializer(serializers.ModelSerializer):
     class Meta:

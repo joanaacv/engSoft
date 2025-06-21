@@ -13,5 +13,5 @@ router.register(r'report', ReportsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/auth/', SimpleAuthView.as_view(), name='simple_auth'),  # sua view customizada
+    path('api/auth/', SimpleAuthView.as_view()), 
 ]
