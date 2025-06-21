@@ -2,42 +2,46 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth import get_user_model
-from .models import Condominium, User, Resident, ParkingSpot, Report
-from .serializers import CondominiumSerializer, UserSerializer, ResidentSerializer, ParkingSpotSerializer, ReportSerializer
+from .models import Condominiums, Users, Residents, ParkingSpots, Reports
+from .serializers import CondominiumsSerializer, UsersSerializer, ResidentsSerializer, ParkingSpotsSerializer, ReportsSerializer
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
-
-class CondominiumViewSet(viewsets.ModelViewSet):
-    queryset = Condominium.objects.all()
-    serializer_class = CondominiumSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class CondominiumsViewSet(viewsets.ModelViewSet):
+    queryset = Condominiums.objects.all()
+    serializer_class = CondominiumsSerializer
 
 
-class ResidentViewSet(viewsets.ModelViewSet):
-    queryset = Resident.objects.all()
-    serializer_class = ResidentSerializer
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
 
 
-class ParkingSpotViewSet(viewsets.ModelViewSet):
-    queryset = ParkingSpot.objects.all()
-    serializer_class = ParkingSpotSerializer
+class ResidentsViewSet(viewsets.ModelViewSet):
+    queryset = Residents.objects.all()
+    serializer_class = ResidentsSerializer
 
 
-class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+class ParkingSpotsViewSet(viewsets.ModelViewSet):
+    queryset = ParkingSpots.objects.all()
+    serializer_class = ParkingSpotsSerializer
+
+
+class ReportsViewSet(viewsets.ModelViewSet):
+    queryset = Reports.objects.all()
+    serializer_class = ReportsSerializer
 
 class SimpleAuthView(APIView):
     def post(self, request):
-        username = request.data.get('username')
+        email = request.data.get('username')
         password = request.data.get('password')
-        user = authenticate(username=username, password=password)
+        User = get_user_model()
+        try:
+            user_obj = User.objects.get(email=email)
+            user = authenticate(username=user_obj.username, password=password)
+        except User.DoesNotExist:
+            user = None
         if user is not None:
             return Response(UserSerializer(user).data)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

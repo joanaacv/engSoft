@@ -1,73 +1,66 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.utils.translation import gettext_lazy as _
 
 
-class Condominium(models.Model):
-    name = models.CharField(max_length=100)
-    adress = models.TextField()
-    hourly_rate = models.DecimalField(max_digits=6, decimal_places=2)
-    
-    def __str__(self):
-        return self.nome
-    
+class Condominiums(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    hourly_rate = models.FloatField(blank=True, null=True)
 
-class User(AbstractUser):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True, max_length=100)
-    password = models.CharField(max_length=255)  # Deve ser criptografada
-    condominium = models.ForeignKey(Condominium, on_delete=models.SET_NULL, null=True, blank=True)
-    is_admin = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
-
-    # Evita conflito com o auth.User padrão
-    """
-    groups = models.ManyToManyField(
-        Group,
-        related_name='custom_user_set',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='custom_user_permissions_set',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
-    """
-    def __str__(self):
-        return self.username
+    class Meta:
+        managed = False
+        db_table = 'condominiums'
 
 
-class Resident(models.Model):
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class ParkingSpots(models.Model):
+    spot_name = models.CharField(max_length=10, blank=True, null=True)
+    condominium = models.ForeignKey(Condominiums, models.DO_NOTHING, blank=True, null=True)
+    for_rent = models.BooleanField(blank=True, null=True)
+    owner = models.ForeignKey('Residents', models.DO_NOTHING, blank=True, null=True)
 
-    def __str__(self):
-        return f"Resident: {self.user.name}"
-
-
-class ParkingSpot(models.Model):
-    spot_name = models.CharField(max_length=10)
-    condominium = models.ForeignKey(Condominium, on_delete=models.CASCADE)
-    for_rent = models.BooleanField(default=False)
-    owner = models.ForeignKey(Resident, on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f"Spot {self.spot_name} - Condo {self.condominium.name}"
+    class Meta:
+        managed = False
+        db_table = 'parkingspots'
 
 
-class Report(models.Model):
-    landlord = models.ForeignKey(Resident, related_name='landlord_reports', on_delete=models.CASCADE)
-    tenant = models.ForeignKey(Resident, related_name='tenant_reports', on_delete=models.CASCADE)
-    spot = models.ForeignKey(ParkingSpot, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    payment_confirmed = models.BooleanField(default=False)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+class Reports(models.Model):
+    landlord = models.ForeignKey('Residents', models.DO_NOTHING, blank=True, null=True)
+    tenant = models.ForeignKey('Residents', models.DO_NOTHING, related_name='reports_tenant_set', blank=True, null=True)
+    spot = models.ForeignKey(ParkingSpots, models.DO_NOTHING, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    payment_confirmed = models.BooleanField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    def __str__(self):
-        return f"Report for Spot {self.spot.spot_name} from {self.start_date} to {self.end_date}"
+    class Meta:
+        managed = False
+        db_table = 'reports'
+
+
+class Residents(models.Model):
+    balance = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'residents'
+
+
+class Users(models.Model):
+    name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(unique=True, max_length=100)
+    password = models.CharField(max_length=255)
+    condominium = models.ForeignKey(Condominiums, models.DO_NOTHING, blank=True, null=True)
+    is_admin = models.BooleanField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'users'

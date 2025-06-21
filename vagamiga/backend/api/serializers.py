@@ -1,34 +1,39 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Condominium, User, Resident, ParkingSpot, Report
+from .models import Condominiums, Users, Residents, ParkingSpots, Reports
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-
-class CondominiumSerializer(serializers.ModelSerializer):
+class CondominiumsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Condominium
+        db_table = 'condominiums'
+        model = Condominiums
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UsersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        db_table = 'users'
+        model = Users
         fields = '__all__'
 
 
-class ResidentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+class ResidentsSerializer(serializers.ModelSerializer):
+    user = UsersSerializer(read_only=True)
     class Meta:
-        model = Resident
+        db_table = 'residents'
+        model = Residents
         fields = '__all__'
 
 
-class ParkingSpotSerializer(serializers.ModelSerializer):
+class ParkingSpotsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ParkingSpot
+        db_table = 'parkingspots'
+        model = ParkingSpots
         fields = '__all__'
 
 
-class ReportSerializer(serializers.ModelSerializer):
+class ReportsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Report
+        db_table = 'reports'
+        model = Reports
         fields = '__all__'
