@@ -50,7 +50,7 @@ const Register: React.FC = () => {
             margin="normal"
             required
             fullWidth
-            label="name"
+            label="Nome"
             name="name"
             value={formData.name}
             onChange={handleChange}
@@ -71,7 +71,7 @@ const Register: React.FC = () => {
             margin="normal"
             required
             fullWidth
-            label="Password"
+            label="Senha"
             name="password"
             type="password"
             value={formData.password}
@@ -89,11 +89,11 @@ const Register: React.FC = () => {
             color="primary"
             style={{ marginTop: "16px" }}
           >
-            Sign Up
+            Criar conta
           </Button>
           <Box mt={2}>
             <Link href="/login" variant="body2">
-              Already have an account? Sign In
+              Já possui uma conta? Entre agora.
             </Link>
           </Box>
         </Box>

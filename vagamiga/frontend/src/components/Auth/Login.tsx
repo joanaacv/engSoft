@@ -48,7 +48,7 @@ const Login: React.FC = () => {
             margin="normal"
             required
             fullWidth
-            label="Password"
+            label="Senha"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -65,11 +65,11 @@ const Login: React.FC = () => {
             color="primary"
             style={{ marginTop: "16px" }}
           >
-            Sign In
+            Entrar
           </Button>
           <Box mt={2}>
             <Link href="/register" variant="body2">
-              Don't have an account? Sign Up
+              Não tem uma conta? Cadastre-se.
             </Link>
           </Box>
         </Box>

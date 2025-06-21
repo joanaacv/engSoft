@@ -10,8 +10,15 @@ export interface ParkingSpot {
 
 // Buscar todas as vagas
 export const getParkingSpots = async (): Promise<ParkingSpot[]> => {
-  const response = await api.get("/parkingspot/");
-  return response.data;
+  try {
+    const response = await api.get("/parkingspot/");
+    console.log("Vagas buscadas:", response.data);
+    return response.data;
+  } catch (error) {
+    // Trate o erro conforme necessário, por exemplo:
+    console.error("Erro ao buscar vagas:", error);
+    throw error;
+  }
 };
 
 // Buscar uma vaga específica

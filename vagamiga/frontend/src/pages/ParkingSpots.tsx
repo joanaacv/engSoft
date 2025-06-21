@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
@@ -12,18 +11,43 @@ import React, { useEffect, useState } from "react";
 import {
   createParkingSpot,
   deleteParkingSpot,
-  getParkingSpots,
-  updateParkingSpot,
   ParkingSpot,
+  updateParkingSpot,
 } from "../api/parkingspots";
 import ParkingSpotCard from "../components/ParkingSpot/ParkingSpotCard";
 import ParkingSpotForm from "../components/ParkingSpot/ParkingSpotForm";
 import { useAuth } from "../contexts/AuthContext";
 
+const mockParkingSpots: ParkingSpot[] = [
+  {
+    id: 1,
+    spot_name: "A-101",
+    condominium: 1,
+    for_rent: true,
+    owner: 2,
+  },
+  {
+    id: 2,
+    spot_name: "B-202",
+    condominium: 1,
+    for_rent: false,
+    owner: 3,
+  },
+  {
+    id: 3,
+    spot_name: "C-303",
+    condominium: 2,
+    for_rent: true,
+    owner: null,
+  },
+];
+
 const ParkingSpotPage: React.FC = () => {
-  const [parkingspots, setVagas] = useState<ParkingSpot[]>([]);
+  const [parkingSpots, setSpots] = useState<ParkingSpot[]>([]);
   const [openForm, setOpenForm] = useState(false);
-  const [currentparkingspot, setCurrentVaga] = useState<ParkingSpot | null>(null);
+  const [currentParkingSpot, setCurrentSpot] = useState<ParkingSpot | null>(
+    null
+  );
   const [search, setSearch] = useState("");
   const { user } = useAuth();
   const [inicio, setInicio] = useState("");
@@ -31,38 +55,52 @@ const ParkingSpotPage: React.FC = () => {
   const [locador, setLocador] = useState("");
 
   useEffect(() => {
-    fetchVagas();
+    fetchSpots();
   }, []);
 
-  const fetchVagas = async () => {
-    const data = await getParkingSpots();
-    setVagas(data);
+  const fetchSpots = async () => {
+    const data = mockParkingSpots; // dados fake
+    // const data = await getParkingSpots(); // chamada real
+    setSpots(data);
   };
 
   const handleSubmit = async (data: any) => {
-    if (currentparkingspot) {
-      await updateParkingSpot(currentparkingspot.id, data);
+    if (currentParkingSpot) {
+      await updateParkingSpot(currentParkingSpot.id, data);
     } else {
       await createParkingSpot(data);
     }
-    fetchVagas();
+    fetchSpots();
     setOpenForm(false);
-    setCurrentVaga(null);
+    setCurrentSpot(null);
   };
 
-  const handleEdit = (vaga: ParkingSpot) => {
-    setCurrentVaga(vaga);
+  const handleEdit = (spot: ParkingSpot) => {
+    setCurrentSpot(spot);
     setOpenForm(true);
   };
 
   const handleDelete = async (id: number) => {
     await deleteParkingSpot(id);
-    fetchVagas();
+    fetchSpots();
   };
 
-  const filteredVagas = parkingspots.filter((parkingspot) =>
-    parkingspot.spot_name.toString().toLowerCase().includes(search)
+  const handleClaim = async (id: number) => {
+    await updateParkingSpot(id, { for_rent: true });
+    fetchSpots();
+  };
+
+  const filteredSpots = parkingSpots.filter((parkingSpot) =>
+    parkingSpot.spot_name
+      .toString()
+      .toLowerCase()
+      .includes(search.toLowerCase())
   );
+
+  const handleUpdateStatus = async (id: number, free: boolean) => {
+    await updateParkingSpot(id, { for_rent: free });
+    fetchSpots();
+  };
 
   const [confirmClaimId, setConfirmClaimId] = useState<number | null>(null);
 
@@ -86,7 +124,6 @@ const ParkingSpotPage: React.FC = () => {
             </Button>
           )}
         </Box>
-
         <Box mb={3}>
           <TextField
             label="Pesquisar vagas"
@@ -96,14 +133,29 @@ const ParkingSpotPage: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </Box>
+        <Box display="flex" flexWrap="wrap" gap={2}>
+          {filteredSpots.map((spot) => (
+            <ParkingSpotCard
+              key={spot.id}
+              spot={spot}
+              onClaim={
+                !spot.for_rent && spot.owner === user?.id
+                  ? () => handleClaim(spot.id)
+                  : undefined
+              }
+              onRent={() => handleUpdateStatus(spot.id, !spot.for_rent)}
+              isOwner={spot.owner === user?.id}
+            />
+          ))}
+        </Box>
 
-[        <Dialog open={openForm} onClose={() => setOpenForm(false)}>
+        <Dialog open={openForm} onClose={() => setOpenForm(false)}>
           <DialogTitle>
-            {currentparkingspot ? "Editar Vaga" : "Adicionar Vaga"}
+            {currentParkingSpot ? "Editar Vaga" : "Adicionar Vaga"}
           </DialogTitle>
           <DialogContent>
             <ParkingSpotForm
-              initialValues={currentparkingspot || undefined}
+              initialValues={currentParkingSpot || undefined}
               onSubmit={handleSubmit}
             />
           </DialogContent>
