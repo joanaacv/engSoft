@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateUser } from "../../api/users";
@@ -18,7 +11,7 @@ const Register: React.FC = () => {
     password: "",
     repeatPassword: "",
   });
-  const { register, error } = useAuth();
+  const { user, register, error } = useAuth();
   const navigate = useNavigate();
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -48,11 +41,11 @@ const Register: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  return (
+  return user.is_admin ? (
     <Container maxWidth="xs">
       <Box mt={8} display="flex" flexDirection="column" alignItems="center">
         <Typography component="h1" variant="h5">
-          Registrar
+          Registrar novo morador
         </Typography>
         <Box component="form" onSubmit={handleSubmit} mt={3} width="100%">
           <TextField
@@ -113,12 +106,44 @@ const Register: React.FC = () => {
           >
             Criar conta
           </Button>
-          <Box mt={2}>
-            <Link href="/login" variant="body2">
-              Já possui uma conta? Entre agora.
-            </Link>
-          </Box>
         </Box>
+      </Box>
+    </Container>
+  ) : (
+    <Container maxWidth="xs">
+      <Box
+        mt={10}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        bgcolor="#fff3e0"
+        borderRadius={3}
+        boxShadow={4}
+        p={5}
+      >
+        <Typography
+          component="h1"
+          variant="h4"
+          color="error"
+          fontWeight="bold"
+          gutterBottom
+        >
+          Acesso restrito
+        </Typography>
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          mt={2}
+          align="center"
+          fontWeight="medium"
+        >
+          Apenas{" "}
+          <span style={{ color: "#d32f2f", fontWeight: 600 }}>
+            administradores
+          </span>{" "}
+          podem registrar novos usuários.
+        </Typography>
       </Box>
     </Container>
   );

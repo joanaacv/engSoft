@@ -80,6 +80,23 @@ const ParkingSpotPage: React.FC = () => {
 
   const [confirmClaimId, setConfirmClaimId] = useState<number | null>(null);
 
+  const [reports, setReports] = useState<Report[]>([]);
+  const [viewAs, setViewAs] = useState<"locatario" | "locador">("locatario");
+
+  useEffect(() => {
+    fetchLocacoes();
+  }, [viewAs]);
+
+  const fetchLocacoes = async () => {
+    let data: Report[];
+    if (viewAs === "locatario") {
+      data = [];
+    } else {
+      data = [];
+    }
+    setReports(data);
+  };
+
   return (
     <>
       <Box p={3}>
@@ -90,6 +107,23 @@ const ParkingSpotPage: React.FC = () => {
           mb={3}
         >
           <Typography variant="h4">Vagas</Typography>
+          <Box>
+            <Button
+              variant={viewAs === "locatario" ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => setViewAs("locatario")}
+              style={{ marginRight: "8px" }}
+            >
+              Como Locatário
+            </Button>
+            <Button
+              variant={viewAs === "locador" ? "contained" : "outlined"}
+              color="primary"
+              onClick={() => setViewAs("locador")}
+            >
+              Como Locador
+            </Button>
+          </Box>
           {user?.user_type === "admin" && (
             <Button
               variant="contained"

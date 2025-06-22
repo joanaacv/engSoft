@@ -1,6 +1,6 @@
 import api from "./index";
-import { Resident } from "./residents";
 import { ParkingSpot } from "./parkingspots";
+import { Resident } from "./residents";
 
 export interface Report {
   id: number;
@@ -37,6 +37,11 @@ export const payReport = async (id: number): Promise<Report> => {
 
 export const getMyReports = async (): Promise<Report[]> => {
   const response = await api.get("report/my_reports/");
+  return response.data;
+};
+
+export const getAllReports = async (): Promise<Report[]> => {
+  const response = await api.get("report/all_reports/");
   return response.data;
 };
 

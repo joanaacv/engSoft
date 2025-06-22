@@ -1,10 +1,9 @@
 import {
-  Apartment as CondominioIcon,
-  Dashboard as DashboardIcon,
   Home as HomeIcon,
   Receipt as LocacaoIcon,
   Person as ProfileIcon,
   Assessment as RelatorioIcon,
+  Person as UserIcon,
   LocalParking as VagaIcon,
 } from "@mui/icons-material";
 import {
@@ -28,12 +27,12 @@ const CustomDrawer = ({
 }) => {
   return (
     <Drawer
-      variant="temporary" // <-- aqui, para poder abrir/fechar
+      variant="temporary"
       anchor="left"
       open={open}
-      onClose={toggleDrawer} // fecha ao clicar fora
+      onClose={toggleDrawer}
       ModalProps={{
-        keepMounted: true, // para melhorar performance em mobile
+        keepMounted: true,
       }}
     >
       <Box
@@ -53,20 +52,11 @@ const CustomDrawer = ({
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/dashboard">
+            <ListItemButton component={Link} to="/registro">
               <ListItemIcon>
-                <DashboardIcon />
+                <UserIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/condominios">
-              <ListItemIcon>
-                <CondominioIcon />
-              </ListItemIcon>
-              <ListItemText primary="Condomínios" />
+              <ListItemText primary="Cadastro de Usuário" />
             </ListItemButton>
           </ListItem>
 
