@@ -37,8 +37,12 @@ export const deleteResident = async (id: number): Promise<void> => {
   await api.delete(`resident/${id}/`);
 };
 
-
 export const getBalance = async (id: number): Promise<number> => {
   const response = await api.get(`resident/${id}/`);
   return response.data.balance;
+};
+
+export const getUserId = async (id: number): Promise<number> => {
+  const response = await api.get(`resident/${id}/`);
+  return response.data.user;
 };

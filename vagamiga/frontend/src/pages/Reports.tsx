@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getReportsAsTenant, getMyReports, Report} from "../api/reports";
+import { getReportsAsTenant, getReportsAsLandlord, Report} from "../api/reports";
 import { useAuth } from "../contexts/AuthContext";
 
 const ReportsPage: React.FC = () => {
@@ -20,17 +20,23 @@ const ReportsPage: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    fetchLocacoes();
-  }, [viewAs]);
-
-  const fetchLocacoes = async () => {
-    let data: Report[];
-    if (viewAs === "locatario") {
-      data = await getMyReports();
-    } else {
-      data = await getReportsAsTenant();
+    if (user) {
+      fetchLocacoes(user.id);
     }
-    setReports(data);
+  }, [viewAs, user]);
+
+  const fetchLocacoes = async (userId: number) => {
+    let data: Report[] | null;
+
+    if (viewAs === "locatario") {
+      data = await getReportsAsLandlord(userId);
+    } else {
+      data = await getReportsAsTenant(userId);
+    }
+
+    if (data){
+      setReports(data);
+    }
   };
 
   return (
@@ -66,33 +72,29 @@ const ReportsPage: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID Locação</TableCell>
+              <TableCell>Nome da Vaga</TableCell>
+              <TableCell>Locatario</TableCell>
+              <TableCell>Locador</TableCell>
               <TableCell>Data Inicio</TableCell>
               <TableCell>Data Fim</TableCell>
               <TableCell>Valor</TableCell>
               <TableCell>Confirmação de Pagamento</TableCell>
-              <TableCell>Conteúdo</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {reports.map((report) => (
-              <TableRow key={report.id}>
-                <TableCell>{report.id}</TableCell>
-                <TableCell>{report.start_date}</TableCell>
-                <TableCell>{report.end_date}</TableCell>
-                <TableCell>{report.amount}</TableCell>
-                <TableCell>{report.payment_confirmed}</TableCell>
-                <TableCell>
-                  <Box
-                    component="div"
-                    whiteSpace="normal"
-                    maxWidth="500px"
-                    textOverflow="ellipsis"
-                    overflow="hidden"
-                  >
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
+            {Array.isArray(reports) &&
+              reports.map((report) => (
+                <TableRow key={report.id}>
+                  <TableCell>{report.id}</TableCell>
+                  <TableCell>{report.spot?.spot_name || "N/A"}</TableCell>
+                  <TableCell>{report.tenant?.user?.name || "N/A"}</TableCell>
+                  <TableCell>{report.landlord?.user?.name || "N/A"}</TableCell>
+                  <TableCell>{report.start_date}</TableCell>
+                  <TableCell>{report.end_date}</TableCell>
+                  <TableCell>{report.amount}</TableCell>
+                  <TableCell>{report.payment_confirmed ? "Sim" : "Não"}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
