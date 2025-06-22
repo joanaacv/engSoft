@@ -11,36 +11,13 @@ import React, { useEffect, useState } from "react";
 import {
   createParkingSpot,
   deleteParkingSpot,
+  getParkingSpots,
   ParkingSpot,
   updateParkingSpot,
 } from "../api/parkingspots";
 import ParkingSpotCard from "../components/ParkingSpot/ParkingSpotCard";
 import ParkingSpotForm from "../components/ParkingSpot/ParkingSpotForm";
 import { useAuth } from "../contexts/AuthContext";
-
-const mockParkingSpots: ParkingSpot[] = [
-  {
-    id: 1,
-    spot_name: "A-101",
-    condominium: 1,
-    for_rent: true,
-    owner: 2,
-  },
-  {
-    id: 2,
-    spot_name: "B-202",
-    condominium: 1,
-    for_rent: false,
-    owner: 3,
-  },
-  {
-    id: 3,
-    spot_name: "C-303",
-    condominium: 2,
-    for_rent: true,
-    owner: null,
-  },
-];
 
 const ParkingSpotPage: React.FC = () => {
   const [parkingSpots, setSpots] = useState<ParkingSpot[]>([]);
@@ -59,8 +36,7 @@ const ParkingSpotPage: React.FC = () => {
   }, []);
 
   const fetchSpots = async () => {
-    const data = mockParkingSpots; // dados fake
-    // const data = await getParkingSpots(); // chamada real
+    const data = await getParkingSpots();
     setSpots(data);
   };
 
@@ -85,7 +61,7 @@ const ParkingSpotPage: React.FC = () => {
     fetchSpots();
   };
 
-  const handleClaim = async (id: number) => {
+  const handleRentClaim = async (id: number) => {
     await updateParkingSpot(id, { for_rent: true });
     fetchSpots();
   };
@@ -97,8 +73,8 @@ const ParkingSpotPage: React.FC = () => {
       .includes(search.toLowerCase())
   );
 
-  const handleUpdateStatus = async (id: number, free: boolean) => {
-    await updateParkingSpot(id, { for_rent: free });
+  const handleRentUpdateStatus = async (id: number) => {
+    await updateParkingSpot(id, { for_rent: false });
     fetchSpots();
   };
 
@@ -138,13 +114,9 @@ const ParkingSpotPage: React.FC = () => {
             <ParkingSpotCard
               key={spot.id}
               spot={spot}
-              onClaim={
-                !spot.for_rent && spot.owner === user?.id
-                  ? () => handleClaim(spot.id)
-                  : undefined
-              }
-              onRent={() => handleUpdateStatus(spot.id, !spot.for_rent)}
-              isOwner={spot.owner === user?.id}
+              onClaim={() => handleRentClaim(spot.id)}
+              onChangeRent={() => handleRentUpdateStatus(spot.id)}
+              isOwner={spot.owner === user.id}
             />
           ))}
         </Box>

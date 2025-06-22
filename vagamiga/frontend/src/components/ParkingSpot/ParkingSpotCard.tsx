@@ -4,14 +4,14 @@ import { ParkingSpot } from "../../api/parkingspots";
 
 interface ParkingSpotCardProps {
   spot: ParkingSpot;
-  onRent?: () => void;
+  onChangeRent?: () => void;
   onClaim?: () => void;
   isOwner?: boolean;
 }
 
 const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
-  spot,
-  onRent,
+  spot: { spot_name, condominium, for_rent },
+  onChangeRent,
   onClaim,
   isOwner,
 }) => {
@@ -19,22 +19,20 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
     <Card sx={{ width: 300, height: 180 }}>
       <CardContent>
         <Typography variant="h6" component="h2">
-          Vaga {spot.spot_name}
+          Vaga {spot_name}
         </Typography>
+        <Typography color="textSecondary">Condomínio: {condominium}</Typography>
         <Typography color="textSecondary">
-          Condomínio: {spot.condominium}
-        </Typography>
-        <Typography color="textSecondary">
-          Status: {spot.for_rent ? "Disponível para aluguel" : "Indisponível"}
+          Status: {for_rent ? "Disponível para aluguel" : "Indisponível"}
         </Typography>
 
         <Box mt={2}>
-          {onRent && !spot.owner && !isOwner && (
-            <Button variant="contained" color="primary" onClick={onRent}>
+          {onChangeRent && for_rent && !isOwner && (
+            <Button variant="contained" color="primary" onClick={onChangeRent}>
               Alugar
             </Button>
           )}
-          {onClaim && spot.owner && isOwner && (
+          {onClaim && !for_rent && isOwner && (
             <Button variant="contained" color="secondary" onClick={onClaim}>
               Reivindicar
             </Button>
