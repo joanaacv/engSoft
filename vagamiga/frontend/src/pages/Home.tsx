@@ -13,18 +13,31 @@ import {
   CardContent,
   Container,
   Grid,
+  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, login, error } = useAuth();
   const theme = useTheme();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const features = [
     {
@@ -84,64 +97,109 @@ const HomePage: React.FC = () => {
             O sistema inteligente de gerenciamento de vagas de estacionamento
             para condomínios
           </Typography>
-          {!user && (
-            <Box mt={4}>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={() => navigate("/login")}
-                style={{ marginRight: "16px" }}
-              >
-                Login
-              </Button>
-              <Button
-                variant="outlined"
-                color="inherit"
-                size="large"
-                onClick={() => navigate("/register")}
-              >
-                Cadastre-se
-              </Button>
-            </Box>
-          )}
         </Container>
       </Box>
 
-      <Container maxWidth="lg" style={{ padding: "40px 0" }}>
+      <Container maxWidth="lg">
         <Typography variant="h4" component="h2" align="center" gutterBottom>
-          Nossos Recursos
-        </Typography>
-        <Grid container spacing={4}>
-          {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <Card
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
-                  <Box mb={2}>{feature.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom>
-                    {feature.title}
+          {!user && (
+            <>
+              {" "}
+              <Container maxWidth="xs">
+                <Box
+                  mt={8}
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                >
+                  <Typography component="h1" variant="h5">
+                    Encontre sua vaga ideal!
                   </Typography>
-                  <Typography>{feature.description}</Typography>
-                </CardContent>
-                <CardActions style={{ justifyContent: "center" }}>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => navigate(feature.path)}
+                  <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    mt={3}
+                    width="100%"
                   >
-                    {feature.action}
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Email"
+                      autoFocus
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Senha"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {error && (
+                      <Typography color="error" variant="body2">
+                        {typeof error === "string" ? error : "Login failed"}
+                      </Typography>
+                    )}
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      style={{ marginTop: "16px" }}
+                    >
+                      Entrar
+                    </Button>
+                  </Box>
+                </Box>
+              </Container>
+            </>
+          )}
+        </Typography>
+        {user && (
+          <>
+            <Typography variant="h4" component="h2" align="center" gutterBottom>
+              Nossos Recursos
+            </Typography>
+            {user && (
+              <Grid container spacing={4}>
+                {features.map((feature, index) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Card
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
+                        <Box mb={2}>{feature.icon}</Box>
+                        <Typography variant="h6" component="h3" gutterBottom>
+                          {feature.title}
+                        </Typography>
+                        <Typography>{feature.description}</Typography>
+                      </CardContent>
+                      <CardActions style={{ justifyContent: "center" }}>
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() => navigate(feature.path)}
+                        >
+                          {feature.action}
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </>
+        )}
       </Container>
 
       {/* {user && (
