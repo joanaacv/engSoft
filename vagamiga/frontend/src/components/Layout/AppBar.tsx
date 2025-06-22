@@ -30,7 +30,7 @@ const CustomAppBar = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
   const handleLogout = () => {
     handleMenuClose();
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleProfile = () => {
@@ -60,7 +60,7 @@ const CustomAppBar = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
         {user && (
           <Box display="flex" alignItems="center">
             <Typography variant="subtitle1" sx={{ mr: 2 }}>
-              Olá, {user.first_name || user.username}
+              Olá, {user.name}
             </Typography>
 
             <IconButton
@@ -70,9 +70,9 @@ const CustomAppBar = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
               onClick={handleMenuOpen}
               color="inherit"
             >
-              {user.first_name ? (
+              {user.name ? (
                 <Avatar sx={{ width: 32, height: 32 }}>
-                  {user.first_name.charAt(0).toUpperCase()}
+                  {user.name.charAt(0).toUpperCase()}
                 </Avatar>
               ) : (
                 <AccountCircle />

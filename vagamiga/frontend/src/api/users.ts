@@ -1,6 +1,6 @@
 import api from "./index";
 
-export interface UserData {
+export interface UserResponse {
   id: number;
   name: string;
   email: string;
@@ -9,22 +9,26 @@ export interface UserData {
   is_admin: boolean;
 }
 
+export interface CreateUser {
+  name: string;
+  email: string;
+  password: string;
+}
+
 // Buscar todos os usuários
-export const getUsers = async (): Promise<UserData[]> => {
+export const getUsers = async (): Promise<UserResponse[]> => {
   const response = await api.get("/user/");
   return response.data;
 };
 
 // Buscar usuário por ID
-export const getUser = async (id: number): Promise<UserData> => {
+export const getUser = async (id: number): Promise<UserResponse> => {
   const response = await api.get(`/user/${id}/`);
   return response.data;
 };
 
 // Criar novo usuário (registro)
-export const createUser = async (
-  data: Omit<UserData, "id" | "created_at" | "updated_at">
-): Promise<UserData> => {
+export const createUser = async (data: CreateUser): Promise<UserResponse> => {
   const response = await api.post("/user/", data);
   return response.data;
 };
@@ -32,8 +36,8 @@ export const createUser = async (
 // Atualizar usuário
 export const updateUser = async (
   id: number,
-  data: Partial<UserData>
-): Promise<UserData> => {
+  data: Partial<UserResponse>
+): Promise<UserResponse> => {
   const response = await api.patch(`/user/${id}/`, data);
   return response.data;
 };

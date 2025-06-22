@@ -1,12 +1,12 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { updateUser, UserData } from "../api/users";
+import { updateUser, UserResponse } from "../api/users";
 import { useAuth } from "../contexts/AuthContext";
 import { getResidentByUserId } from "../api/residents";
 
 const ProfilePage: React.FC = () => {
   const { user, logout } = useAuth();
-  const [formData, setFormData] = useState<Partial<UserData>>({
+  const [formData, setFormData] = useState<Partial<UserResponse>>({
     name: "",
     email: "",
     password: "",

@@ -1,10 +1,10 @@
 import api from "./index";
-import { UserData } from "./users";
+import { UserResponse } from "./users";
 
 export interface Resident {
   id: number;
   balance: number;
-  user: UserData;
+  user: UserResponse;
 }
 
 export const getResidents = async (): Promise<Resident[]> => {

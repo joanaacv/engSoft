@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { login as loginApi } from "../api/auth";
-import { createUser, UserData } from "../api/users";
+import { createUser, CreateUser } from "../api/users";
 
 interface AuthContextType {
   user: any;
@@ -14,7 +14,7 @@ interface AuthContextType {
   error: any;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: UserData) => Promise<void>;
+  register: (userData: CreateUser) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   };
 
-  const register = async (userData: UserData) => {
+  const register = async (userData: CreateUser) => {
     setLoading(true);
     console.log("Register attempt:", userData);
     try {
@@ -54,8 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: userData.name,
         email: userData.email,
         password: userData.password,
-        condominium: userData.condominium || null,
-        is_admin: userData.is_admin || false,
       });
       console.log("User registered successfully");
       setError(null);

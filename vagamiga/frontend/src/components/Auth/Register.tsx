@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CreateUser } from "../../api/users";
 import { useAuth } from "../../contexts/AuthContext";
 
 const Register: React.FC = () => {
@@ -29,11 +30,13 @@ const Register: React.FC = () => {
       return;
     }
     try {
-      await register({
+      const data: CreateUser = {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-      });
+      };
+
+      await register(data);
       navigate("/login");
     } catch (err) {
       console.error(err);
