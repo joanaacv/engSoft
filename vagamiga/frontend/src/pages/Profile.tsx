@@ -2,6 +2,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { updateUser, UserData } from "../api/users";
 import { useAuth } from "../contexts/AuthContext";
+import { getResidentByUserId } from "../api/residents";
 
 const ProfilePage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -12,6 +13,8 @@ const ProfilePage: React.FC = () => {
     condominium: null,
     is_admin: false,
   });
+  const [balance, setBalance] = useState<number>(0);
+
 
   useEffect(() => {
     if (user) {
@@ -23,7 +26,18 @@ const ProfilePage: React.FC = () => {
         is_admin: user.is_admin,
       });
     }
+
+    // Buscar balance
+    getResidentByUserId(user.id).then((resident) => {
+      if (resident) {
+        setBalance(resident.balance);
+      }
+    });
   }, [user]);
+
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +49,8 @@ const ProfilePage: React.FC = () => {
       console.error(error);
     }
   };
+
+
 
   if (!user) return null;
 
@@ -99,7 +115,7 @@ const ProfilePage: React.FC = () => {
             </Box>
             <Box mt={6}>
               <Typography variant="h6" gutterBottom>
-                Saldo Disponível: R$ {user.balance?.toFixed(2) || "0.00"}
+                Saldo Disponível: R$ {balance}
               </Typography>
             </Box>
             <Box mt={4}>
