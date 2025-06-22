@@ -55,7 +55,7 @@ const Login: React.FC = () => {
           />
           {error && (
             <Typography color="error" variant="body2">
-              {error.response?.data?.detail || "Login failed"}
+              {typeof error === "string" ? error : "Login failed"}
             </Typography>
           )}
           <Button

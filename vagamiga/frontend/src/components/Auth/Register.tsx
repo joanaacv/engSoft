@@ -15,16 +15,25 @@ const Register: React.FC = () => {
     name: "",
     email: "",
     password: "",
-    condominium: "",
-    is_admin: "",
+    repeatPassword: "",
   });
   const { register, error } = useAuth();
   const navigate = useNavigate();
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLocalError(null);
+    if (formData.password !== formData.repeatPassword) {
+      setLocalError("As senhas não coincidem.");
+      return;
+    }
     try {
-      await register(formData);
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
       navigate("/login");
     } catch (err) {
       console.error(err);
@@ -75,9 +84,21 @@ const Register: React.FC = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          {error && (
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Repetir Senha"
+            name="repeatPassword"
+            type="password"
+            value={formData.repeatPassword}
+            onChange={handleChange}
+          />
+          {(localError || error) && (
             <Typography color="error" variant="body2">
-              {error.response?.data?.detail || "Registration failed"}
+              {localError ||
+                (typeof error === "string" ? error : "Registration failed")}
             </Typography>
           )}
           <Button

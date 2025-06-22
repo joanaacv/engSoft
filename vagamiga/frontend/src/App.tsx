@@ -2,6 +2,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { AuthProvider } from "./contexts/AuthContext";
 import theme from "./theme";
@@ -15,9 +17,9 @@ import Condominios from "./pages/Condominiums";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Locacoes from "./pages/Locacoes";
+import Vagas from "./pages/ParkingSpots";
 import Profile from "./pages/Profile";
 import Relatorios from "./pages/Reports";
-import Vagas from "./pages/ParkingSpots";
 
 const App: React.FC = () => (
   <ThemeProvider theme={theme}>
@@ -83,6 +85,7 @@ const App: React.FC = () => (
         </Routes>
       </Router>
     </AuthProvider>
+    <ToastContainer />
   </ThemeProvider>
 );
 

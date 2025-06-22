@@ -1,8 +1,9 @@
 import {
   Apartment as CondominiumIcon,
+  LocalParking as ParkingSpotIcon,
+  Assessment as RelatorioIcon,
   Receipt as ReportIcon,
   Person as UserIcon,
-  LocalParking as ParkingSpotIcon,
 } from "@mui/icons-material";
 import {
   Box,
@@ -47,14 +48,22 @@ const HomePage: React.FC = () => {
       title: "Sistema de Locações",
       description:
         "Gerencie as locações de vagas entre moradores do condomínio.",
-      action: "Ver Locações",
+      action: "Acesse",
+      path: "/locacoes",
+    },
+    {
+      icon: <RelatorioIcon fontSize="large" color="primary" />,
+
+      title: "Meus relatórios",
+      description: "Visualize e gere relatórios sobre o uso de suas vagas.",
+      action: "Acesse",
       path: "/locacoes",
     },
     {
       icon: <UserIcon fontSize="large" color="primary" />,
-      title: "Perfil Personalizado",
-      description: "Acesse e edite suas informações pessoais e preferências.",
-      action: "Meu Perfil",
+      title: "Minha Conta",
+      description: "Visualize e edite suas informações pessoais.",
+      action: "Acesse",
       path: "/profile",
     },
   ];
@@ -160,3 +169,37 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+// const features = [
+//   {
+//     icon: <CondominiumIcon fontSize="large" color="primary" />,
+//     title: "Gerenciamento de Condomínios",
+//     description:
+//       "Cadastre e gerencie todos os condomínios associados à plataforma.",
+//     action: "Ver Condomínios",
+//     path: "/condominios",
+//   },
+//   {
+//     icon: <ParkingSpotIcon fontSize="large" color="primary" />,
+//     title: "Controle de Vagas",
+//     description:
+//       "Registre e acompanhe todas as vagas de estacionamento disponíveis.",
+//     action: "Ver Vagas",
+//     path: "/vagas",
+//   },
+//   {
+//     icon: <ReportIcon fontSize="large" color="primary" />,
+//     title: "Sistema de Locações",
+//     description:
+//       "Gerencie as locações de vagas entre moradores do condomínio.",
+//     action: "Ver Locações",
+//     path: "/locacoes",
+//   },
+//   {
+//     icon: <UserIcon fontSize="large" color="primary" />,
+//     title: "Perfil Personalizado",
+//     description: "Acesse e edite suas informações pessoais e preferências.",
+//     action: "Meu Perfil",
+//     path: "/profile",
+//   },
+// ];

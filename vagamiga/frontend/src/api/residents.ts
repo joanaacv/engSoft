@@ -1,10 +1,10 @@
 import api from "./index";
-import { User } from "./users";
+import { UserData } from "./users";
 
 export interface Resident {
   id: number;
   balance: number;
-  user: User;
+  user: UserData;
 }
 
 export const getResidents = async (): Promise<Resident[]> => {
@@ -17,7 +17,9 @@ export const getResidentById = async (id: number): Promise<Resident> => {
   return response.data;
 };
 
-export const createResident = async (resident: Omit<Resident, "id">): Promise<Resident> => {
+export const createResident = async (
+  resident: Omit<Resident, "id">
+): Promise<Resident> => {
   const response = await api.post("resident/", resident);
   return response.data;
 };
