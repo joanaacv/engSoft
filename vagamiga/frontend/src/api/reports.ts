@@ -35,12 +35,16 @@ export const payReport = async (id: number): Promise<Report> => {
   return response.data;
 };
 
-export const getMyReports = async (): Promise<Report[]> => {
-  const response = await api.get("report/my_reports/");
-  return response.data;
+export const getReportsAsLandlord = async (landlord: number): Promise<Report[]> => {
+  const response = await api.get("report/", {
+    params: { user: landlord },
+  });
+  return response.data ?? []; // garante que sempre retorna um array
 };
 
-export const getReportsAsTenant = async (): Promise<Report[]> => {
-  const response = await api.get("report/as_tenant/");
-  return response.data;
+export const getReportsAsTenant = async (tenant: number): Promise<Report[]> => {
+  const response = await api.get("report/", {
+    params: { user: tenant },
+  });
+  return response.data ?? []; // garante que sempre retorna um array
 };

@@ -27,6 +27,12 @@ export const getUser = async (id: number): Promise<UserResponse> => {
   return response.data;
 };
 
+// Buscar nome do usuário por ID
+export const getUserName = async (id: number): Promise<UserResponse> => {
+  const response = await api.get(`/user/${id}/`);
+  return response.data.name;
+};
+
 // Criar novo usuário (registro)
 export const createUser = async (data: CreateUser): Promise<UserResponse> => {
   const response = await api.post("/user/", data);

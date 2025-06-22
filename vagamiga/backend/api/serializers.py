@@ -31,6 +31,10 @@ class ParkingSpotsSerializer(serializers.ModelSerializer):
 
 
 class ReportsSerializer(serializers.ModelSerializer):
+    tenant = ResidentsSerializer()
+    landlord = ResidentsSerializer()
+    spot = ParkingSpotsSerializer()
+
     class Meta:
         db_table = 'reports'
         model = Reports
