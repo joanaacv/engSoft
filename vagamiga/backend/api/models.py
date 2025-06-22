@@ -58,8 +58,6 @@ class Users(models.Model):
     password = models.CharField(max_length=255)
     condominium = models.ForeignKey(Condominiums, models.DO_NOTHING, blank=True, null=True)
     is_admin = models.BooleanField(blank=True, null=True)
-    created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False

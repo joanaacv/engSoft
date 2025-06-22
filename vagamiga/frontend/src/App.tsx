@@ -11,12 +11,12 @@ import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
 
-import Condominios from "./pages/Condominium";
+import Condominios from "./pages/Condominiums";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
-import Locacoes from "./pages/Reports";
+import Locacoes from "./pages/Locacoes";
 import Profile from "./pages/Profile";
-import Relatorios from "./pages/Residents";
+import Relatorios from "./pages/Reports";
 import Vagas from "./pages/ParkingSpots";
 
 const App: React.FC = () => (

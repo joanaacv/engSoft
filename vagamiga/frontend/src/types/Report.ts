@@ -2,7 +2,7 @@ export interface Report {
   id: number;
   landlord: number;
   tenant: number;
-  spot: number;
+  parking_spot: number;
   start_date: string; // formato ISO: 'YYYY-MM-DD'
   end_date: string;
   payment_confirmed: boolean;

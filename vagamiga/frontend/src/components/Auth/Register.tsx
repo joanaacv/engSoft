@@ -17,8 +17,6 @@ const Register: React.FC = () => {
     password: "",
     condominium: "",
     is_admin: "",
-    created_at: "",
-    updated_at: "",
   });
   const { register, error } = useAuth();
   const navigate = useNavigate();

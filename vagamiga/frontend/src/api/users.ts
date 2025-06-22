@@ -7,8 +7,6 @@ export interface User {
   password: string; // não deve ser retornado pelo backend após o login
   condominium: number | null; // pode ser um objeto se usar depth=1
   is_admin: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 // Buscar todos os usuários

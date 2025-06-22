@@ -41,7 +41,7 @@ const ReportsPage: React.FC = () => {
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h4" gutterBottom>Relatórios</Typography>
+        <Typography variant="h4">Minhas Locações</Typography>
         <Box>
           <Button
             variant={viewAs === "locatario" ? "contained" : "outlined"}
@@ -65,32 +65,28 @@ const ReportsPage: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID Locação</TableCell>
-              <TableCell>Data Inicio</TableCell>
-              <TableCell>Data Fim</TableCell>
+              <TableCell>Vaga</TableCell>
+              <TableCell>
+                {viewAs === "locatario" ? "Locador" : "Locatário"}
+              </TableCell>
+              <TableCell>Período</TableCell>
               <TableCell>Valor</TableCell>
-              <TableCell>Confirmação de Pagamento</TableCell>
-              <TableCell>Conteúdo</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {reports.map((report) => (
               <TableRow key={report.id}>
-                <TableCell>{report.id}</TableCell>
-                <TableCell>{report.start_date}</TableCell>
-                <TableCell>{report.end_date}</TableCell>
-                <TableCell>{report.amount}</TableCell>
-                <TableCell>{report.payment_confirmed}</TableCell>
+                <TableCell>Vaga {report.spot.spot_name}</TableCell>
                 <TableCell>
-                  <Box
-                    component="div"
-                    whiteSpace="normal"
-                    maxWidth="500px"
-                    textOverflow="ellipsis"
-                    overflow="hidden"
-                  >
-                  </Box>
+                  {viewAs === "locatario" ? report.landlord.user.name : report.tenant.user.name}
                 </TableCell>
+                <TableCell>
+                  {new Date(report.start_date).toLocaleString()} -{" "}
+                  {new Date(report.end_date).toLocaleString()}
+                </TableCell>
+                <TableCell>R$ {report.amount.toFixed(2)}</TableCell>
+                <TableCell>{report.payment_confirmed ? "Pago" : "Pendente"}</TableCell>
               </TableRow>
             ))}
           </TableBody>
