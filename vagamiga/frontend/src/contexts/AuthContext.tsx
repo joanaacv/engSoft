@@ -10,6 +10,7 @@ import { createUser, CreateUser } from "../api/users";
 
 interface AuthContextType {
   user: any;
+  admin: boolean;
   loading: boolean;
   error: any;
   login: (email: string, password: string) => Promise<void>;
@@ -21,13 +22,16 @@ const AuthContext = createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any>(null);
+  const [admin, setAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setAdmin(!!parsedUser?.is_admin);
     }
     setLoading(false);
   }, []);
@@ -37,11 +41,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await loginApi(email, password);
       setUser(response.data);
+      setAdmin(!!response.data?.is_admin);
       localStorage.setItem("user", JSON.stringify(response.data));
       setError(null);
     } catch (err: any) {
       setError(err?.response?.data?.error || "Email ou senha incorretos");
       setUser(null);
+      setAdmin(false);
     }
     setLoading(false);
   };
@@ -67,9 +73,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    setAdmin(false);
   };
 
-  const value = { user, loading, error, login, register, logout };
+  const value = { user, admin, loading, error, login, register, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

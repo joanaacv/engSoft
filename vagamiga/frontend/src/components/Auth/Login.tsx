@@ -68,7 +68,7 @@ const Login: React.FC = () => {
             Entrar
           </Button>
           <Box mt={2}>
-            <Link href="/register" variant="body2">
+            <Link href="/registro" variant="body2">
               Não tem uma conta? Cadastre-se.
             </Link>
           </Box>

@@ -13,8 +13,6 @@ import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
 
-import Condominios from "./pages/Condominiums";
-import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Locacoes from "./pages/Locacoes";
 import Vagas from "./pages/ParkingSpots";
@@ -28,27 +26,19 @@ const App: React.FC = () => (
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
 
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
             <Route
-              path="dashboard"
+              path="/registro"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <Register />
                 </PrivateRoute>
               }
             />
-            <Route
-              path="condominios"
-              element={
-                <PrivateRoute>
-                  <Condominios />
-                </PrivateRoute>
-              }
-            />
+
             <Route
               path="vagas"
               element={

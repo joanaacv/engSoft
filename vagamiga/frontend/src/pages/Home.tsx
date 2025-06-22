@@ -1,5 +1,4 @@
 import {
-  Apartment as CondominiumIcon,
   LocalParking as ParkingSpotIcon,
   Assessment as RelatorioIcon,
   Receipt as ReportIcon,
@@ -13,33 +12,71 @@ import {
   CardContent,
   Container,
   Grid,
+  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, login, error } = useAuth();
   const theme = useTheme();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const features = [
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const featuresAdmin = [
     {
-      icon: <CondominiumIcon fontSize="large" color="primary" />,
-      title: "Gerenciamento de Condomínios",
-      description:
-        "Cadastre e gerencie todos os condomínios associados à plataforma.",
-      action: "Ver Condomínios",
-      path: "/condominios",
+      icon: <UserIcon fontSize="large" color="primary" />,
+      title: "Cadastro de Novos Usuários",
+      description: "Adicione novos moradores.",
+      action: "Acesse",
+      path: "/registro",
+    },
+    {
+      icon: <RelatorioIcon fontSize="large" color="primary" />,
+
+      title: "Relatórios",
+      description: "Visualize e gere relatórios sobre o uso de vagas.",
+      action: "Acesse",
+      path: "/locacoes",
     },
     {
       icon: <ParkingSpotIcon fontSize="large" color="primary" />,
       title: "Controle de Vagas",
       description:
         "Registre e acompanhe todas as vagas de estacionamento disponíveis.",
+      action: "Ver Vagas",
+      path: "/vagas",
+    },
+    {
+      icon: <ReportIcon fontSize="large" color="primary" />,
+      title: "Sistema de Locações",
+      description:
+        "Gerencie as locações de vagas entre moradores do condomínio.",
+      action: "Acesse",
+      path: "/locacoes",
+    },
+  ];
+
+  const featuresUser = [
+    {
+      icon: <ParkingSpotIcon fontSize="large" color="primary" />,
+      title: "Vagas no seu Condomínio",
+      description: "Acompanhe todas as vagas de estacionamento disponíveis.",
       action: "Ver Vagas",
       path: "/vagas",
     },
@@ -82,124 +119,103 @@ const HomePage: React.FC = () => {
           </Typography>
           <Typography variant="h5" component="h2" gutterBottom>
             O sistema inteligente de gerenciamento de vagas de estacionamento
-            para condomínios
+            para o seu condomínio
           </Typography>
-          {!user && (
-            <Box mt={4}>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                onClick={() => navigate("/login")}
-                style={{ marginRight: "16px" }}
-              >
-                Login
-              </Button>
-              <Button
-                variant="outlined"
-                color="inherit"
-                size="large"
-                onClick={() => navigate("/register")}
-              >
-                Cadastre-se
-              </Button>
-            </Box>
-          )}
         </Container>
       </Box>
 
-      <Container maxWidth="lg" style={{ padding: "40px 0" }}>
+      <Container maxWidth="lg">
         <Typography variant="h4" component="h2" align="center" gutterBottom>
-          Nossos Recursos
-        </Typography>
-        <Grid container spacing={4}>
-          {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <Card
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
-                  <Box mb={2}>{feature.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom>
-                    {feature.title}
-                  </Typography>
-                  <Typography>{feature.description}</Typography>
-                </CardContent>
-                <CardActions style={{ justifyContent: "center" }}>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => navigate(feature.path)}
+          {user ? (
+            <Grid container marginTop={8} spacing={4}>
+              {(user.is_admin ? featuresAdmin : featuresUser).map((feature) => (
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                  <Card
+                    style={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
                   >
-                    {feature.action}
-                  </Button>
-                </CardActions>
-              </Card>
+                    <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
+                      <Box mb={2}>{feature.icon}</Box>
+                      <Typography variant="h6" component="h3" gutterBottom>
+                        {feature.title}
+                      </Typography>
+                      <Typography>{feature.description}</Typography>
+                    </CardContent>
+                    <CardActions style={{ justifyContent: "center" }}>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => navigate(feature.path)}
+                      >
+                        {feature.action}
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
+          ) : (
+            <Container maxWidth="xs">
+              <Box
+                mt={8}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+              >
+                <Typography component="h1" variant="h5">
+                  Encontre sua vaga ideal!
+                </Typography>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  mt={3}
+                  width="100%"
+                >
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Email"
+                    autoFocus
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Senha"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {error && (
+                    <Typography color="error" variant="body2">
+                      {typeof error === "string" ? error : "Login failed"}
+                    </Typography>
+                  )}
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    style={{ marginTop: "16px" }}
+                  >
+                    Entrar
+                  </Button>
+                </Box>
+              </Box>
+            </Container>
+          )}
+        </Typography>
       </Container>
-
-      {/* {user && (
-        <Box bgcolor={theme.palette.grey[100]} py={6} textAlign="center">
-          <Container maxWidth="md">
-            <Typography variant="h4" component="h2" gutterBottom>
-              Pronto para começar?
-            </Typography>
-            <Typography variant="body1">
-              Acesse seu dashboard para gerenciar suas vagas e condomínios.
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => navigate("/dashboard")}
-            >
-              Acessar Dashboard
-            </Button>
-          </Container>
-        </Box>
-      )} */}
     </Box>
   );
 };
 
 export default HomePage;
-
-// const features = [
-//   {
-//     icon: <CondominiumIcon fontSize="large" color="primary" />,
-//     title: "Gerenciamento de Condomínios",
-//     description:
-//       "Cadastre e gerencie todos os condomínios associados à plataforma.",
-//     action: "Ver Condomínios",
-//     path: "/condominios",
-//   },
-//   {
-//     icon: <ParkingSpotIcon fontSize="large" color="primary" />,
-//     title: "Controle de Vagas",
-//     description:
-//       "Registre e acompanhe todas as vagas de estacionamento disponíveis.",
-//     action: "Ver Vagas",
-//     path: "/vagas",
-//   },
-//   {
-//     icon: <ReportIcon fontSize="large" color="primary" />,
-//     title: "Sistema de Locações",
-//     description:
-//       "Gerencie as locações de vagas entre moradores do condomínio.",
-//     action: "Ver Locações",
-//     path: "/locacoes",
-//   },
-//   {
-//     icon: <UserIcon fontSize="large" color="primary" />,
-//     title: "Perfil Personalizado",
-//     description: "Acesse e edite suas informações pessoais e preferências.",
-//     action: "Meu Perfil",
-//     path: "/profile",
-//   },
-// ];
