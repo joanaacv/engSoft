@@ -1,0 +1,57 @@
+DROP TABLE reports;
+DROP TABLE parkingspots;
+DROP TABLE residents;
+DROP TABLE users;
+DROP TABLE condominiums;
+
+
+
+CREATE TABLE Condominiums (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  address TEXT,
+  hourly_rate float
+);
+
+CREATE TABLE Users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL, -- should be hashed
+  condominium_id INT,
+  is_admin BOOLEAN DEFAULT FALSE, -- differentiates admin and regular users
+  FOREIGN KEY (condominium_id) REFERENCES Condominiums(id)
+);
+
+CREATE TABLE Residents (
+  id SERIAL PRIMARY KEY,
+  balance DECIMAL(10, 2),
+  user_id INT,
+  FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+
+CREATE TABLE ParkingSpots (
+  id SERIAL PRIMARY KEY,
+  spot_name VARCHAR(10),
+  condominium_id INT,
+  for_rent BOOLEAN,
+  owner_id INT,
+  FOREIGN KEY (owner_id) REFERENCES Residents(id),
+  FOREIGN KEY (condominium_id) REFERENCES Condominiums(id)
+);
+
+
+CREATE TABLE Reports (
+  id SERIAL PRIMARY KEY,
+  landlord_id INT,
+  tenant_id INT,
+  spot_id INT,
+  start_date DATE,
+  end_date DATE,
+  payment_confirmed BOOLEAN,
+  amount DECIMAL(10, 2),
+  FOREIGN KEY (landlord_id) REFERENCES Residents(id),
+  FOREIGN KEY (tenant_id) REFERENCES Residents(id),
+  FOREIGN KEY (spot_id) REFERENCES ParkingSpots(id)
+);
