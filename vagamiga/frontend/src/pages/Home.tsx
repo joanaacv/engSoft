@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
       title: "Cadastro de Novos Usuários",
       description: "Adicione novos moradores.",
       action: "Acesse",
-      path: "/registro",
+      path: "/usuarios",
     },
     {
       icon: <LocalParking fontSize="large" color="primary" />,

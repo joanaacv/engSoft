@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import theme from "./theme";
 
-import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
 
@@ -27,15 +26,6 @@ const App: React.FC = () => (
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-
-            <Route
-              path="/registro"
-              element={
-                <PrivateRoute>
-                  <Register />
-                </PrivateRoute>
-              }
-            />
 
             <Route
               path="vagas"
