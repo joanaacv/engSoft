@@ -25,11 +25,9 @@ const ParkingSpotPage: React.FC = () => {
   const [currentParkingSpot, setCurrentSpot] = useState<ParkingSpot | null>(
     null
   );
+  const [viewAs, setViewAs] = useState<"locatario" | "locador">("locatario");
   const [search, setSearch] = useState("");
   const { user } = useAuth();
-  const [inicio, setInicio] = useState("");
-  const [fim, setFim] = useState("");
-  const [locador, setLocador] = useState("");
 
   useEffect(() => {
     fetchSpots();
@@ -66,36 +64,35 @@ const ParkingSpotPage: React.FC = () => {
     fetchSpots();
   };
 
-  const filteredSpots = parkingSpots.filter((parkingSpot) =>
-    parkingSpot.spot_name
-      .toString()
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
-
   const handleRentUpdateStatus = async (id: number) => {
     await updateParkingSpot(id, { for_rent: false });
     fetchSpots();
   };
 
-  const [confirmClaimId, setConfirmClaimId] = useState<number | null>(null);
+  const filteredSpots = parkingSpots.filter((parkingSpot) => {
+    const matchesSearch = parkingSpot.spot_name
+      .toString()
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-  const [reports, setReports] = useState<Report[]>([]);
-  const [viewAs, setViewAs] = useState<"locatario" | "locador">("locatario");
-
-  useEffect(() => {
-    fetchLocacoes();
-  }, [viewAs]);
-
-  const fetchLocacoes = async () => {
-    let data: Report[];
-    if (viewAs === "locatario") {
-      data = [];
-    } else {
-      data = [];
+    if (user?.is_admin) {
+      return matchesSearch;
     }
-    setReports(data);
-  };
+
+    if (viewAs === "locatario") {
+      return (
+        matchesSearch &&
+        parkingSpot.for_rent === true &&
+        parkingSpot.owner !== user?.id
+      );
+    }
+
+    if (viewAs === "locador") {
+      return matchesSearch && parkingSpot.owner === user?.id;
+    }
+
+    return false;
+  });
 
   return (
     <>
@@ -107,24 +104,33 @@ const ParkingSpotPage: React.FC = () => {
           mb={3}
         >
           <Typography variant="h4">Vagas</Typography>
-          <Box>
-            <Button
-              variant={viewAs === "locatario" ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => setViewAs("locatario")}
-              style={{ marginRight: "8px" }}
-            >
-              Como Locatário
-            </Button>
-            <Button
-              variant={viewAs === "locador" ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => setViewAs("locador")}
-            >
-              Como Locador
-            </Button>
-          </Box>
-          {user?.user_type === "admin" && (
+          {!user?.is_admin && (
+            <Box>
+              <Button
+                variant={viewAs === "locatario" ? "contained" : "outlined"}
+                color="primary"
+                onClick={async () => {
+                  setViewAs("locatario");
+                  if (user.id === user?.id) {
+                    await fetchSpots();
+                  }
+                }}
+                style={{ marginRight: "8px" }}
+              >
+                Como Locatário
+              </Button>
+              <Button
+                variant={viewAs === "locador" ? "contained" : "outlined"}
+                color="primary"
+                onClick={async () => {
+                  setViewAs("locador");
+                }}
+              >
+                Como Locador
+              </Button>
+            </Box>
+          )}
+          {user?.is_admin && (
             <Button
               variant="contained"
               color="primary"
@@ -148,9 +154,25 @@ const ParkingSpotPage: React.FC = () => {
             <ParkingSpotCard
               key={spot.id}
               spot={spot}
-              onClaim={() => handleRentClaim(spot.id)}
-              onChangeRent={() => handleRentUpdateStatus(spot.id)}
-              isOwner={spot.owner === user.id}
+              onClaim={
+                !user?.is_admin ? () => handleRentClaim(spot.id) : undefined
+              }
+              onChangeRent={
+                !user?.is_admin
+                  ? () => handleRentUpdateStatus(spot.id)
+                  : undefined
+              }
+              onEdit={
+                user?.is_admin || spot.owner === user?.id
+                  ? () => handleEdit(spot)
+                  : undefined
+              }
+              onDelete={
+                user?.is_admin || spot.owner === user?.id
+                  ? () => handleDelete(spot.id)
+                  : undefined
+              }
+              isOwner={user?.is_admin ? true : spot.owner === user?.id}
             />
           ))}
         </Box>

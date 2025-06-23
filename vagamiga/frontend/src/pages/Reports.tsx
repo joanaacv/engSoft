@@ -11,7 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { getReportsAsTenant, getReportsAsLandlord, Report} from "../api/reports";
+import {
+  getReportsAsLandlord,
+  getReportsAsTenant,
+  Report,
+} from "../api/reports";
 import { useAuth } from "../contexts/AuthContext";
 
 const ReportsPage: React.FC = () => {
@@ -20,12 +24,14 @@ const ReportsPage: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      fetchLocacoes(user.id);
+    if (user.is_admin) {
+      fetchLAdminReports(user.id);
+    } else {
+      fetchReports(user.id, viewAs);
     }
   }, [viewAs, user]);
 
-  const fetchLocacoes = async (userId: number) => {
+  const fetchLAdminReports = async (userId: number) => {
     let data: Report[] | null;
 
     if (viewAs === "locatario") {
@@ -34,9 +40,27 @@ const ReportsPage: React.FC = () => {
       data = await getReportsAsTenant(userId);
     }
 
-    if (data){
+    if (data) {
       setReports(data);
     }
+  };
+
+  const fetchReports = async (
+    userId: number,
+    tipo?: "locatario" | "locador"
+  ) => {
+    let data: Report[] | null;
+    const tipoView = tipo || viewAs;
+    if (tipoView === "locatario") {
+      data = await getReportsAsTenant(userId);
+      data = data?.filter((report) => report.tenant?.user?.id === userId) || [];
+    } else {
+      data = await getReportsAsLandlord(userId);
+      data =
+        data?.filter((report) => report.landlord?.user?.id === userId) || [];
+    }
+
+    setReports(data || []);
   };
 
   return (
@@ -47,24 +71,34 @@ const ReportsPage: React.FC = () => {
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h4" gutterBottom>Relatórios</Typography>
-        <Box>
-          <Button
-            variant={viewAs === "locatario" ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => setViewAs("locatario")}
-            style={{ marginRight: "8px" }}
-          >
-            Como Locatário
-          </Button>
-          <Button
-            variant={viewAs === "locador" ? "contained" : "outlined"}
-            color="primary"
-            onClick={() => setViewAs("locador")}
-          >
-            Como Locador
-          </Button>
-        </Box>
+        <Typography variant="h4" gutterBottom>
+          Relatórios
+        </Typography>
+        {!user?.is_admin && (
+          <Box>
+            <Button
+              variant={viewAs === "locatario" ? "contained" : "outlined"}
+              color="primary"
+              onClick={async () => {
+                setViewAs("locatario");
+                if (user) await fetchReports(user.id, "locatario");
+              }}
+              style={{ marginRight: "8px" }}
+            >
+              Como Locatário
+            </Button>
+            <Button
+              variant={viewAs === "locador" ? "contained" : "outlined"}
+              color="primary"
+              onClick={async () => {
+                setViewAs("locador");
+                if (user) await fetchReports(user.id, "locador");
+              }}
+            >
+              Como Locador
+            </Button>
+          </Box>
+        )}
       </Box>
 
       <TableContainer component={Paper}>
@@ -92,7 +126,9 @@ const ReportsPage: React.FC = () => {
                   <TableCell>{report.start_date}</TableCell>
                   <TableCell>{report.end_date}</TableCell>
                   <TableCell>{report.amount}</TableCell>
-                  <TableCell>{report.payment_confirmed ? "Sim" : "Não"}</TableCell>
+                  <TableCell>
+                    {report.payment_confirmed ? "Sim" : "Não"}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

@@ -68,7 +68,7 @@ const HomePage: React.FC = () => {
       title: "Gerencie seu Condomínio",
       description: "Visualize e edite as informações do seu condomínio.",
       action: "Ver Condomínio",
-      path: "/vagas",
+      path: "/condominio",
     },
   ];
 

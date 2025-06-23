@@ -50,3 +50,8 @@ export const getReportsAsTenant = async (tenant: number): Promise<Report[]> => {
   });
   return response.data ?? []; // garante que sempre retorna um array
 };
+
+export const getAllReports = async (): Promise<Report[]> => {
+  const response = await api.get("report/");
+  return response.data ?? []; // garante que sempre retorna um array
+};

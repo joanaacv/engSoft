@@ -12,8 +12,8 @@ import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
 
+import CondominiumPage from "./pages/Comdominum";
 import Home from "./pages/Home";
-import Locacoes from "./pages/Locacoes";
 import Vagas from "./pages/ParkingSpots";
 import Profile from "./pages/Profile";
 import Relatorios from "./pages/Reports";
@@ -45,14 +45,7 @@ const App: React.FC = () => (
                 </PrivateRoute>
               }
             />
-            <Route
-              path="locacoes"
-              element={
-                <PrivateRoute>
-                  <Locacoes />
-                </PrivateRoute>
-              }
-            />
+
             <Route
               path="relatorios"
               element={
@@ -74,6 +67,14 @@ const App: React.FC = () => (
               element={
                 <PrivateRoute>
                   <UsersPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="condominio"
+              element={
+                <PrivateRoute>
+                  <CondominiumPage />
                 </PrivateRoute>
               }
             />
