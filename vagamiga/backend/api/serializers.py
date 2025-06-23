@@ -9,6 +9,7 @@ class CondominiumsSerializer(serializers.ModelSerializer):
 
 
 class UsersSerializer(serializers.ModelSerializer):
+    condominium = serializers.PrimaryKeyRelatedField(queryset=Condominiums.objects.all())
     class Meta:
         db_table = 'users'
         model = Users
@@ -16,9 +17,8 @@ class UsersSerializer(serializers.ModelSerializer):
 
 
 class ResidentsSerializer(serializers.ModelSerializer):
-    user = UsersSerializer(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=Users.objects.all())
     class Meta:
-        db_table = 'residents'
         model = Residents
         fields = '__all__'
 

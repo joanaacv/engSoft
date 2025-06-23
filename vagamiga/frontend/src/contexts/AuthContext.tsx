@@ -60,6 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: userData.name,
         email: userData.email,
         password: userData.password,
+        condominium: 1,
+        is_admin: userData.is_admin,
       });
       console.log("User registered successfully");
       setError(null);

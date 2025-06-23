@@ -17,6 +17,8 @@ import {
   TableRow,
   TextField,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
@@ -27,6 +29,7 @@ import {
   UserResponse,
 } from "../api/users";
 import { useAuth } from "../contexts/AuthContext";
+import { createResident } from "../api/residents";
 
 const UsersPage: React.FC = () => {
   const { user } = useAuth();
@@ -39,6 +42,7 @@ const UsersPage: React.FC = () => {
     email: "",
     password: "",
     repeatPassword: "",
+    is_admin: false,
   });
 
   const [localError, setLocalError] = useState<string | null>(null);
@@ -54,10 +58,28 @@ const UsersPage: React.FC = () => {
 
     try {
       if (editingUser) {
-        const updated = await updateUser(editingUser.id, formData);
+        const updated = await updateUser(editingUser.id, {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          is_admin: formData.is_admin,
+        });
         setUsers(users.map((u) => (u.id === updated.id ? updated : u)));
       } else {
-        const created = await createUser(formData as any);
+        const created = await createUser({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          condominium: 1,
+          is_admin: formData.is_admin,
+        });
+
+        if (!created.is_admin) {
+          await createResident({
+          balance: 0,
+          user: created,
+          });
+        }
         setUsers([...users, created]);
       }
       handleClose();
@@ -81,6 +103,7 @@ const UsersPage: React.FC = () => {
       email: "",
       password: "",
       repeatPassword: "",
+      is_admin: false,
     });
     setOpen(true);
   };
@@ -92,6 +115,7 @@ const UsersPage: React.FC = () => {
       email: u.email,
       password: "",
       repeatPassword: "",
+      is_admin: u.is_admin,
     });
     setOpen(true);
   };
@@ -235,6 +259,18 @@ const UsersPage: React.FC = () => {
                 required
               />
             )}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.is_admin}
+                  onChange={(e) =>
+                    setFormData({ ...formData, is_admin: e.target.checked })
+                  }
+                  color="primary"
+                />
+              }
+              label="Administrador"
+            />
             {localError && (
               <Typography color="error" variant="body2">
                 {localError}

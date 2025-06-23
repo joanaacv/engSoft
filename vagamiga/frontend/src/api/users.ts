@@ -13,6 +13,8 @@ export interface CreateUser {
   name: string;
   email: string;
   password: string;
+  condominium: number | null;
+  is_admin: boolean;
 }
 
 // Buscar todos os usuários
@@ -25,12 +27,6 @@ export const getUsers = async (): Promise<UserResponse[]> => {
 export const getUser = async (id: number): Promise<UserResponse> => {
   const response = await api.get(`/user/${id}/`);
   return response.data;
-};
-
-// Buscar nome do usuário por ID
-export const getUserName = async (id: number): Promise<UserResponse> => {
-  const response = await api.get(`/user/${id}/`);
-  return response.data.name;
 };
 
 // Criar novo usuário (registro)

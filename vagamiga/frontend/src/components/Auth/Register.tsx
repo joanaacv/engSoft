@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography, Checkbox, FormControlLabel } from "@mui/material";
 import React, { useState } from "react";
 import { CreateUser } from "../../api/users";
 import { useAuth } from "../../contexts/AuthContext";
@@ -9,6 +9,7 @@ const Register: React.FC = () => {
     email: "",
     password: "",
     repeatPassword: "",
+    is_admin: false,
   });
   const { user, register, error } = useAuth();
   const [localError, setLocalError] = useState<string | null>(null);
@@ -25,6 +26,8 @@ const Register: React.FC = () => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        condominium: 1,
+        is_admin: formData.is_admin,
       };
 
       await register(data);
@@ -87,6 +90,18 @@ const Register: React.FC = () => {
             type="password"
             value={formData.repeatPassword}
             onChange={handleChange}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.is_admin}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, is_admin: e.target.checked }))
+                }
+                color="primary"
+              />
+            }
+            label="Conceder privilégios de administrador"
           />
           {(localError || error) && (
             <Typography color="error" variant="body2">

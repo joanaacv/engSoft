@@ -12,7 +12,7 @@ export const getResidents = async (): Promise<Resident[]> => {
   return response.data;
 };
 
-export const getResidentById = async (id: number): Promise<Resident> => {
+export const getResident = async (id: number): Promise<Resident> => {
   const response = await api.get(`resident/${id}/`);
   return response.data;
 };
@@ -29,7 +29,7 @@ export const getResidentByUserId = async (userId: number): Promise<Resident | nu
 export const createResident = async (
   resident: Omit<Resident, "id">
 ): Promise<Resident> => {
-  const response = await api.post("resident/", resident);
+  const response = await api.post("resident/", {...resident, user: resident.user.id,});
   return response.data;
 };
 
@@ -40,9 +40,4 @@ export const deleteResident = async (id: number): Promise<void> => {
 export const getBalance = async (id: number): Promise<number> => {
   const response = await api.get(`resident/${id}/`);
   return response.data.balance;
-};
-
-export const getUserId = async (id: number): Promise<number> => {
-  const response = await api.get(`resident/${id}/`);
-  return response.data.user;
 };
