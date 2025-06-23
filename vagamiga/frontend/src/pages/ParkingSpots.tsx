@@ -168,9 +168,7 @@ const ParkingSpotPage: React.FC = () => {
                   : undefined
               }
               onDelete={
-                user?.is_admin || spot.owner === user?.id
-                  ? () => handleDelete(spot.id)
-                  : undefined
+                user?.is_admin ? () => handleDelete(spot.id) : undefined
               }
               isOwner={user?.is_admin ? true : spot.owner === user?.id}
             />
