@@ -149,7 +149,7 @@ const ParkingSpotPage: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </Box>
-        <Box display="flex" flexWrap="wrap" gap={2}>
+        <Box display="center" alignItems="center" flexWrap="wrap" gap={4}>
           {filteredSpots.map((spot) => (
             <ParkingSpotCard
               key={spot.id}
