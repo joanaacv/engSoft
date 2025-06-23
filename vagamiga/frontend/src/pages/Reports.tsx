@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   getReportsAsLandlord,
   getReportsAsTenant,
@@ -25,29 +25,7 @@ const ReportsPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (user.is_admin) {
-      fetchLAdminReports(user.id);
-    } else {
-      fetchReports(user.id, viewAs);
-    }
-  }, [viewAs, user]);
-
-  const fetchLAdminReports = async (userId: number) => {
-    let data: Report[] | null;
-
-    if (viewAs === "locatario") {
-      data = await getReportsAsLandlord(userId);
-    } else {
-      data = await getReportsAsTenant(userId);
-    }
-
-    if (data) {
-      setReports(data);
-    }
-  };
-
-  const fetchReports = async (
+  const fetchReports = useCallback(async (
     userId: number,
     tipo?: "locatario" | "locador"
   ) => {
@@ -58,17 +36,35 @@ const ReportsPage: React.FC = () => {
       data = data?.filter((report) => report.tenant?.user?.id === userId) || [];
     } else {
       data = await getReportsAsLandlord(userId);
-      data =
-        data?.filter((report) => report.landlord?.user?.id === userId) || [];
+      data = data?.filter((report) => report.landlord?.user?.id === userId) || [];
     }
-
     setReports(data || []);
-  };
+  }, [viewAs]);
+
+  const fetchLAdminReports = useCallback(async (userId: number) => {
+    let data: Report[] | null;
+    if (viewAs === "locatario") {
+      data = await getReportsAsLandlord(userId);
+    } else {
+      data = await getReportsAsTenant(userId);
+    }
+    if (data) {
+      setReports(data);
+    }
+  }, [viewAs]);
+
+  useEffect(() => {
+    if (user.is_admin) {
+      fetchLAdminReports(user.id);
+    } else {
+      fetchReports(user.id);
+    }
+  }, [user, viewAs, fetchReports, fetchLAdminReports]);
 
   const filteredReports = reports.filter((report) => {
-    const tenantName = report.tenant?.user?.name.toLowerCase() || "";
-    const landlordName = report.landlord?.user?.name.toLowerCase() || "";
-    const spotName = report.spot?.spot_name.toLowerCase() || "";
+    const tenantName = report.tenant?.user?.name?.toLowerCase() || "";
+    const landlordName = report.landlord?.user?.name?.toLowerCase() || "";
+    const spotName = report.spot?.spot_name?.toLowerCase() || "";
     const searchTerm = search.toLowerCase();
 
     return (

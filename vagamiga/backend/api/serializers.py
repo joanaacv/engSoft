@@ -17,7 +17,7 @@ class UsersSerializer(serializers.ModelSerializer):
 
 
 class ResidentsSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=Users.objects.all())
+    user = UsersSerializer()
     class Meta:
         model = Residents
         fields = '__all__'
