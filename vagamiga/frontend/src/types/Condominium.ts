@@ -1,6 +1,6 @@
 export interface Condominium {
   id: number;
   name: string;
-  adress: string;
+  address: string;
   hourly_rate: number;
 }

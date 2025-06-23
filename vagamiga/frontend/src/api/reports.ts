@@ -1,6 +1,6 @@
 import api from "./index";
-import { Resident } from "./residents";
 import { ParkingSpot } from "./parkingspots";
+import { Resident } from "./residents";
 
 export interface Report {
   id: number;
@@ -35,7 +35,9 @@ export const payReport = async (id: number): Promise<Report> => {
   return response.data;
 };
 
-export const getReportsAsLandlord = async (landlord: number): Promise<Report[]> => {
+export const getReportsAsLandlord = async (
+  landlord: number
+): Promise<Report[]> => {
   const response = await api.get("report/", {
     params: { user: landlord },
   });

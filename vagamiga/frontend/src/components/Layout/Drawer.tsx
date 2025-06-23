@@ -1,8 +1,8 @@
 import {
+  Apartment,
   Home as HomeIcon,
-  Receipt as LocacaoIcon,
   Person as ProfileIcon,
-  Assessment as RelatorioIcon,
+  Receipt,
   Person as UserIcon,
   LocalParking as VagaIcon,
 } from "@mui/icons-material";
@@ -17,6 +17,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const CustomDrawer = ({
   open,
@@ -25,6 +26,8 @@ const CustomDrawer = ({
   open: boolean;
   toggleDrawer: () => void;
 }) => {
+  const { user } = useAuth();
+
   return (
     <Drawer
       variant="temporary"
@@ -51,14 +54,16 @@ const CustomDrawer = ({
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
-            <ListItemButton component={Link} to="/registro">
-              <ListItemIcon>
-                <UserIcon />
-              </ListItemIcon>
-              <ListItemText primary="Cadastro de Usuário" />
-            </ListItemButton>
-          </ListItem>
+          {user?.is_admin && (
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/usuarios">
+                <ListItemIcon>
+                  <UserIcon />
+                </ListItemIcon>
+                <ListItemText primary="Usuários" />
+              </ListItemButton>
+            </ListItem>
+          )}
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/vagas">
@@ -70,23 +75,26 @@ const CustomDrawer = ({
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/locacoes">
-              <ListItemIcon>
-                <LocacaoIcon />
-              </ListItemIcon>
-              <ListItemText primary="Locações" />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
             <ListItemButton component={Link} to="/relatorios">
               <ListItemIcon>
-                <RelatorioIcon />
+                <Receipt />
               </ListItemIcon>
               <ListItemText primary="Relatórios" />
             </ListItemButton>
           </ListItem>
+
+          {user?.is_admin && (
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/condominio">
+                <ListItemIcon>
+                  <Apartment />
+                </ListItemIcon>
+                <ListItemText primary="Condomínio" />
+              </ListItemButton>
+            </ListItem>
+          )}
         </List>
+
         <Divider />
         <List>
           <ListItem disablePadding>

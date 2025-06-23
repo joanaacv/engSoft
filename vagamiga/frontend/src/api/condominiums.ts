@@ -3,7 +3,7 @@ import api from "./index";
 export interface Condominium {
   id: number;
   name: string;
-  adress: string;
+  address: string;
   hourly_rate: number;
 }
 
@@ -35,4 +35,3 @@ export const updateCondominium = async (
 export const deleteCondominium = async (id: number): Promise<void> => {
   await api.delete(`condominium/${id}/`);
 };
-

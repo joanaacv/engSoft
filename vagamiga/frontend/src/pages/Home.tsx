@@ -1,8 +1,9 @@
 import {
-  LocalParking as ParkingSpotIcon,
-  Assessment as RelatorioIcon,
-  Receipt as ReportIcon,
-  Person as UserIcon,
+  Apartment,
+  Assessment,
+  LocalParking,
+  Person,
+  Receipt,
 } from "@mui/icons-material";
 import {
   Box,
@@ -40,22 +41,14 @@ const HomePage: React.FC = () => {
 
   const featuresAdmin = [
     {
-      icon: <UserIcon fontSize="large" color="primary" />,
+      icon: <Person fontSize="large" color="primary" />,
       title: "Cadastro de Novos Usuários",
       description: "Adicione novos moradores.",
       action: "Acesse",
       path: "/registro",
     },
     {
-      icon: <RelatorioIcon fontSize="large" color="primary" />,
-
-      title: "Relatórios",
-      description: "Visualize e gere relatórios sobre o uso de vagas.",
-      action: "Acesse",
-      path: "/locacoes",
-    },
-    {
-      icon: <ParkingSpotIcon fontSize="large" color="primary" />,
+      icon: <LocalParking fontSize="large" color="primary" />,
       title: "Controle de Vagas",
       description:
         "Registre e acompanhe todas as vagas de estacionamento disponíveis.",
@@ -63,41 +56,48 @@ const HomePage: React.FC = () => {
       path: "/vagas",
     },
     {
-      icon: <ReportIcon fontSize="large" color="primary" />,
-      title: "Sistema de Locações",
-      description:
-        "Gerencie as locações de vagas entre moradores do condomínio.",
+      icon: <Receipt fontSize="large" color="primary" />,
+
+      title: "Relatórios",
+      description: "Visualize e gere relatórios sobre o uso de vagas.",
       action: "Acesse",
-      path: "/locacoes",
+      path: "/relatorios",
+    },
+    {
+      icon: <Apartment fontSize="large" color="primary" />,
+      title: "Gerencie seu Condomínio",
+      description: "Visualize e edite as informações do seu condomínio.",
+      action: "Ver Condomínio",
+      path: "/vagas",
     },
   ];
 
   const featuresUser = [
     {
-      icon: <ParkingSpotIcon fontSize="large" color="primary" />,
+      icon: <LocalParking fontSize="large" color="primary" />,
       title: "Vagas no seu Condomínio",
       description: "Acompanhe todas as vagas de estacionamento disponíveis.",
       action: "Ver Vagas",
       path: "/vagas",
     },
     {
-      icon: <ReportIcon fontSize="large" color="primary" />,
+      icon: <Receipt fontSize="large" color="primary" />,
       title: "Sistema de Locações",
       description:
         "Gerencie as locações de vagas entre moradores do condomínio.",
       action: "Acesse",
-      path: "/locacoes",
+      path: "/relatorios",
     },
     {
-      icon: <RelatorioIcon fontSize="large" color="primary" />,
+      icon: <Assessment fontSize="large" color="primary" />,
 
       title: "Meus relatórios",
       description: "Visualize e gere relatórios sobre o uso de suas vagas.",
       action: "Acesse",
-      path: "/locacoes",
+      path: "/relatorios",
     },
     {
-      icon: <UserIcon fontSize="large" color="primary" />,
+      icon: <Person fontSize="large" color="primary" />,
       title: "Minha Conta",
       description: "Visualize e edite suas informações pessoais.",
       action: "Acesse",

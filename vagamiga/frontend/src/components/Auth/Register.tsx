@@ -1,6 +1,5 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { CreateUser } from "../../api/users";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -12,7 +11,6 @@ const Register: React.FC = () => {
     repeatPassword: "",
   });
   const { user, register, error } = useAuth();
-  const navigate = useNavigate();
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,7 +28,6 @@ const Register: React.FC = () => {
       };
 
       await register(data);
-      navigate("/login");
     } catch (err) {
       console.error(err);
     }

@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import theme from "./theme";
 
-import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Layout from "./components/Layout";
@@ -18,6 +17,7 @@ import Locacoes from "./pages/Locacoes";
 import Vagas from "./pages/ParkingSpots";
 import Profile from "./pages/Profile";
 import Relatorios from "./pages/Reports";
+import UsersPage from "./pages/Users";
 
 const App: React.FC = () => (
   <ThemeProvider theme={theme}>
@@ -25,8 +25,6 @@ const App: React.FC = () => (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
-
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
@@ -68,6 +66,14 @@ const App: React.FC = () => (
               element={
                 <PrivateRoute>
                   <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="usuarios"
+              element={
+                <PrivateRoute>
+                  <UsersPage />
                 </PrivateRoute>
               }
             />

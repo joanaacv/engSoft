@@ -39,7 +39,7 @@ const CondominiumList: React.FC<CondominiumListProps> = ({
           {condominiums.map((condominium) => (
             <TableRow key={condominium.id}>
               <TableCell>{condominium.name}</TableCell>
-              <TableCell>{condominium.adress}</TableCell>
+              <TableCell>{condominium.address}</TableCell>
               <TableCell>R$ {condominium.hourly_rate.toFixed(2)}</TableCell>
               <TableCell>
                 <Button
@@ -51,7 +51,10 @@ const CondominiumList: React.FC<CondominiumListProps> = ({
                 <Button color="secondary" onClick={() => onEdit(condominium)}>
                   Editar
                 </Button>
-                <Button color="primary" onClick={() => onDelete(condominium.id)}>
+                <Button
+                  color="primary"
+                  onClick={() => onDelete(condominium.id)}
+                >
                   Excluir
                 </Button>
               </TableCell>

@@ -15,12 +15,12 @@ const CondominiumForm: React.FC<CondominiumFormProps> = ({
   const formik = useFormik({
     initialValues: initialValues || {
       name: "",
-      adress: "",
+      address: "",
       hourly_rate: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
-      adress: Yup.string().required("Required"),
+      address: Yup.string().required("Required"),
       hourly_rate: Yup.number()
         .required("Required")
         .positive("Must be positive"),
@@ -51,18 +51,17 @@ const CondominiumForm: React.FC<CondominiumFormProps> = ({
       <Box mb={2}>
         <TextField
           fullWidth
-          id="adress"
-          name="adress"
+          id="address"
+          name="address"
           label="Endereço"
           multiline
           rows={4}
-          value={formik.values.adress}
+          value={formik.values.address}
           onChange={formik.handleChange}
-          error={formik.touched.adress && Boolean(formik.errors.adress)}
+          error={formik.touched.address && Boolean(formik.errors.address)}
           helperText={
-            formik.touched.adress &&
-            typeof formik.errors.adress === "string"
-              ? formik.errors.adress
+            formik.touched.address && typeof formik.errors.address === "string"
+              ? formik.errors.address
               : undefined
           }
         />
@@ -77,8 +76,7 @@ const CondominiumForm: React.FC<CondominiumFormProps> = ({
           value={formik.values.hourly_rate}
           onChange={formik.handleChange}
           error={
-            formik.touched.hourly_rate &&
-            Boolean(formik.errors.hourly_rate)
+            formik.touched.hourly_rate && Boolean(formik.errors.hourly_rate)
           }
           helperText={
             formik.touched.hourly_rate &&
