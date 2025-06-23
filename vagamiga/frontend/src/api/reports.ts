@@ -13,10 +13,6 @@ export interface Report {
   amount: number; // ou number, dependendo da conversão no backend
 }
 
-export const getReports = async (): Promise<Report[]> => {
-  const response = await api.get("report/");
-  return response.data;
-};
 
 export const getReport = async (id: number): Promise<Report> => {
   const response = await api.get(`report/${id}/`);
@@ -51,7 +47,3 @@ export const getReportsAsTenant = async (tenant: number): Promise<Report[]> => {
   return response.data ?? []; // garante que sempre retorna um array
 };
 
-export const getAllReports = async (): Promise<Report[]> => {
-  const response = await api.get("report/");
-  return response.data ?? []; // garante que sempre retorna um array
-};
