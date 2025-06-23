@@ -100,7 +100,7 @@ const ReportsPage: React.FC = () => {
               }}
               style={{ marginRight: "8px" }}
             >
-              Como Locatário
+              Locatário
             </Button>
             <Button
               variant={viewAs === "locador" ? "contained" : "outlined"}
@@ -110,7 +110,7 @@ const ReportsPage: React.FC = () => {
                 if (user) await fetchReports(user.id, "locador");
               }}
             >
-              Como Locador
+              Locador
             </Button>
           </Box>
         )}

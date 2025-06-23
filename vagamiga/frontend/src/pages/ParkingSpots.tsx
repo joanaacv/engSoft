@@ -117,7 +117,7 @@ const ParkingSpotPage: React.FC = () => {
                 }}
                 style={{ marginRight: "8px" }}
               >
-                Como Locatário
+                Locatário
               </Button>
               <Button
                 variant={viewAs === "locador" ? "contained" : "outlined"}
@@ -126,7 +126,7 @@ const ParkingSpotPage: React.FC = () => {
                   setViewAs("locador");
                 }}
               >
-                Como Locador
+                Locador
               </Button>
             </Box>
           )}

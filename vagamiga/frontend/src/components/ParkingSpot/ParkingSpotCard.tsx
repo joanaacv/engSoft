@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { ParkingSpot } from "../../api/parkingspots";
-
+import PaymentModal from "./Payment";
 interface ParkingSpotCardProps {
   spot: ParkingSpot;
   onChangeRent?: () => void;
@@ -19,6 +19,7 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
   onDelete,
   isOwner,
 }) => {
+  const [openPayment, setOpenPayment] = useState(false);
   return (
     <Card sx={{ width: 300, height: 180 }}>
       <CardContent>
@@ -32,9 +33,23 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
 
         <Box mt={2} display="flex" gap={1}>
           {onChangeRent && for_rent && !isOwner && (
-            <Button variant="contained" color="primary" onClick={onChangeRent}>
-              Alugar
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenPayment(true)}
+              >
+                Alugar
+              </Button>
+              {openPayment && (
+                <PaymentModal
+                  onSuccess={() => {
+                    setOpenPayment(false);
+                    onChangeRent();
+                  }}
+                />
+              )}
+            </>
           )}
           {onClaim && !for_rent && isOwner && (
             <Button variant="contained" color="secondary" onClick={onClaim}>
@@ -60,5 +75,4 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
     </Card>
   );
 };
-
 export default ParkingSpotCard;
