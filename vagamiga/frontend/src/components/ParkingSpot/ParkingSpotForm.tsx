@@ -1,7 +1,8 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
+import { getResidents, Resident } from "../../api/residents"; // ajuste o caminho
 
 
 
@@ -30,16 +31,21 @@ const formik = useFormik({
     },
     validationSchema: Yup.object({
       spot_name: Yup.string().required("Obrigatório"),
-      condominium: Yup.number().required("Obrigatório"),
+      owner: Yup.number().nullable().required("Obrigatório"), // se quiser que o campo seja obrigatório
       for_rent: Yup.boolean(),
     }),
     onSubmit: (values) => {
       onSubmit({
         ...values,
-        condominium: Number(values.condominium),
+        condominium: Number(1),
+        owner: values.owner,
       });
     },
   });
+const [residents, setResidents] = useState<Resident[]>([]);
+useEffect(() => {
+  getResidents().then(setResidents).catch(console.error);
+}, []);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -60,22 +66,23 @@ const formik = useFormik({
         />
       </Box>
       <Box mb={2}>
-        <TextField
-          fullWidth
-          id="condominium"
-          name="condominium"
-          label="ID do Condomínio"
-          type="number"
-          value={formik.values.condominium}
-          onChange={formik.handleChange}
-          error={formik.touched.condominium && Boolean(formik.errors.condominium)}
-          helperText={
-            formik.touched.condominium &&
-            typeof formik.errors.condominium === "string"
-              ? formik.errors.condominium
-              : ""
-          }
-        />
+        <FormControl fullWidth>
+          <InputLabel id="owner-label">Morador responsável</InputLabel>
+          <Select
+            labelId="owner-label"
+            id="owner"
+            name="owner"
+            value={formik.values.owner ?? ""}
+            onChange={formik.handleChange}
+            error={formik.touched.owner && Boolean(formik.errors.owner)}
+          >
+            {residents.map((resident) => (
+              <MenuItem key={resident.id} value={resident.id}>
+                {resident.user.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Button color="primary" variant="contained" fullWidth type="submit">
         {initialValues ? "Atualizar" : "Cadastrar"}

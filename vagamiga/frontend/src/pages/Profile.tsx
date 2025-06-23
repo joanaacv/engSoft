@@ -37,6 +37,9 @@ const ProfilePage: React.FC = () => {
     getResidentByUserId(user.id).then((resident) => {
       if (resident) {
         setBalance(resident.balance);
+        if (user.is_admin) {
+          setBalance(0);
+        }
       }
     });
   }, [user]);
