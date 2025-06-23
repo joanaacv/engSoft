@@ -1,10 +1,4 @@
-import {
-  Apartment,
-  Assessment,
-  LocalParking,
-  Person,
-  Receipt,
-} from "@mui/icons-material";
+import { Apartment, LocalParking, Person, Receipt } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -82,17 +76,8 @@ const HomePage: React.FC = () => {
     },
     {
       icon: <Receipt fontSize="large" color="primary" />,
-      title: "Sistema de Locações",
-      description:
-        "Gerencie as locações de vagas entre moradores do condomínio.",
-      action: "Acesse",
-      path: "/relatorios",
-    },
-    {
-      icon: <Assessment fontSize="large" color="primary" />,
-
       title: "Meus relatórios",
-      description: "Visualize e gere relatórios sobre o uso de suas vagas.",
+      description: "Visualize sobre o uso de suas vagas.",
       action: "Acesse",
       path: "/relatorios",
     },
@@ -127,35 +112,38 @@ const HomePage: React.FC = () => {
       <Container maxWidth="lg">
         <Typography variant="h4" component="h2" align="center" gutterBottom>
           {user ? (
-            <Grid container marginTop={8} spacing={4}>
-              {(user.is_admin ? featuresAdmin : featuresUser).map((feature) => (
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                  <Card
-                    style={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
-                      <Box mb={2}>{feature.icon}</Box>
-                      <Typography variant="h6" component="h3" gutterBottom>
-                        {feature.title}
-                      </Typography>
-                      <Typography>{feature.description}</Typography>
-                    </CardContent>
-                    <CardActions style={{ justifyContent: "center" }}>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() => navigate(feature.path)}
-                      >
-                        {feature.action}
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+            <Grid container marginTop={8} spacing={4} justifyContent="center">
+              {(user.is_admin ? featuresAdmin : featuresUser).map(
+                (feature, idx, arr) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={feature.title}>
+                    <Card
+                      style={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "100%",
+                      }}
+                    >
+                      <CardContent style={{ flexGrow: 1, textAlign: "center" }}>
+                        <Box mb={2}>{feature.icon}</Box>
+                        <Typography variant="h6" component="h3" gutterBottom>
+                          {feature.title}
+                        </Typography>
+                        <Typography>{feature.description}</Typography>
+                      </CardContent>
+                      <CardActions style={{ justifyContent: "center" }}>
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() => navigate(feature.path)}
+                        >
+                          {feature.action}
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                )
+              )}
             </Grid>
           ) : (
             <Container maxWidth="xs">
