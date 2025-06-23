@@ -175,7 +175,12 @@ const ParkingSpotPage: React.FC = () => {
           ))}
         </Box>
 
-        <Dialog open={openForm} onClose={() => setOpenForm(false)}>
+        <Dialog
+          open={openForm}
+          onClose={() => setOpenForm(false)}
+          maxWidth="sm"
+          fullWidth
+        >
           <DialogTitle>
             {currentParkingSpot ? "Editar Vaga" : "Adicionar Vaga"}
           </DialogTitle>

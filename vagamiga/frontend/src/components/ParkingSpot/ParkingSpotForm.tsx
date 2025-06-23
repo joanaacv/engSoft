@@ -1,10 +1,16 @@
-import { Box, Button, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useFormik } from "formik";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { getResidents, Resident } from "../../api/residents"; // ajuste o caminho
-
-
 
 interface ParkingSpotFormProps {
   initialValues?: {
@@ -21,8 +27,11 @@ interface ParkingSpotFormProps {
   }) => void;
 }
 
-const ParkingSpotForm: React.FC<ParkingSpotFormProps> = ({ initialValues, onSubmit }) => {
-const formik = useFormik({
+const ParkingSpotForm: React.FC<ParkingSpotFormProps> = ({
+  initialValues,
+  onSubmit,
+}) => {
+  const formik = useFormik({
     initialValues: {
       spot_name: initialValues?.spot_name || "",
       condominium: initialValues?.condominium ?? "",
@@ -42,14 +51,17 @@ const formik = useFormik({
       });
     },
   });
-const [residents, setResidents] = useState<Resident[]>([]);
-useEffect(() => {
-  getResidents().then(setResidents).catch(console.error);
-}, []);
+  const [residents, setResidents] = useState<Resident[]>([]);
+  useEffect(() => {
+    getResidents().then(setResidents).catch(console.error);
+  }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Box mb={2}>
+    <form
+      style={{ marginTop: 12, width: "100%" }}
+      onSubmit={formik.handleSubmit}
+    >
+      <Box style={{ width: "100%" }} mb={2}>
         <TextField
           fullWidth
           id="spot_name"
@@ -59,7 +71,8 @@ useEffect(() => {
           onChange={formik.handleChange}
           error={formik.touched.spot_name && Boolean(formik.errors.spot_name)}
           helperText={
-            formik.touched.spot_name && typeof formik.errors.spot_name === "string"
+            formik.touched.spot_name &&
+            typeof formik.errors.spot_name === "string"
               ? formik.errors.spot_name
               : ""
           }
