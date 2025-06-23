@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ import { useAuth } from "../contexts/AuthContext";
 const ReportsPage: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [viewAs, setViewAs] = useState<"locatario" | "locador">("locatario");
+  const [search, setSearch] = useState("");
   const { user } = useAuth();
 
   useEffect(() => {
@@ -63,6 +65,19 @@ const ReportsPage: React.FC = () => {
     setReports(data || []);
   };
 
+  const filteredReports = reports.filter((report) => {
+    const tenantName = report.tenant?.user?.name.toLowerCase() || "";
+    const landlordName = report.landlord?.user?.name.toLowerCase() || "";
+    const spotName = report.spot?.spot_name.toLowerCase() || "";
+    const searchTerm = search.toLowerCase();
+
+    return (
+      tenantName.includes(searchTerm) ||
+      landlordName.includes(searchTerm) ||
+      spotName.includes(searchTerm)
+    );
+  });
+
   return (
     <Box p={3}>
       <Box
@@ -101,6 +116,15 @@ const ReportsPage: React.FC = () => {
         )}
       </Box>
 
+      <Box mb={3}>
+        <TextField
+          label="Pesquisar usuários ou vaga"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -116,8 +140,8 @@ const ReportsPage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(reports) &&
-              reports.map((report) => (
+            {Array.isArray(filteredReports) &&
+              filteredReports.map((report) => (
                 <TableRow key={report.id}>
                   <TableCell>{report.id}</TableCell>
                   <TableCell>{report.spot?.spot_name || "N/A"}</TableCell>
