@@ -1,4 +1,13 @@
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { ParkingSpot } from "../../api/parkingspots";
 import PaymentModal from "./Payment";
@@ -42,12 +51,22 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
                 Alugar
               </Button>
               {openPayment && (
-                <PaymentModal
-                  onSuccess={() => {
-                    setOpenPayment(false);
-                    onChangeRent();
-                  }}
-                />
+                <Dialog
+                  open={openPayment}
+                  onClose={() => setOpenPayment(false)}
+                  maxWidth="sm"
+                  fullWidth
+                >
+                  <DialogTitle>Pagamento de Aluguel de Vaga</DialogTitle>
+                  <DialogContent>
+                    <PaymentModal
+                      onSuccess={() => {
+                        setOpenPayment(false);
+                        onChangeRent();
+                      }}
+                    />
+                  </DialogContent>
+                </Dialog>
               )}
             </>
           )}

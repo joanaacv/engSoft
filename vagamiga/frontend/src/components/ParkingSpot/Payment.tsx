@@ -1,7 +1,14 @@
-import { Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { ptBR } from "date-fns/locale/pt-BR";
 import React, { useEffect, useState } from "react";
 import { getCondominium } from "../../api/condominiums";
-import { getResidentByUserId } from "../../api/residents";
+import {
+  getResidentByUserId,
+  updateResidentBalance,
+} from "../../api/residents";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface PaymentProps {
@@ -11,74 +18,56 @@ interface PaymentProps {
 const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
   const { user } = useAuth();
   const [balance, setBalance] = useState<number>(0);
-  const [hourlyRate, setHourlyRate] = useState<number>(0);
+  const [dailyRate, setDailyRate] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [residentId, setResidentId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return;
-      setLoading(true);
-      try {
-        const resident = await getResidentByUserId(user.id);
-        if (!resident) {
-          setError("Residente não encontrado.");
-          setLoading(false);
-          return;
-        }
-        setBalance(resident.balance);
+  const days =
+    startDate && endDate
+      ? Math.max(
+          1,
+          Math.ceil(
+            (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) +
+              1
+          )
+        )
+      : 0;
 
-        if (!user.condominium) {
-          setError("Condomínio não encontrado.");
-          setLoading(false);
-          return;
-        }
-        const condo = await getCondominium(user.condominium);
-        setHourlyRate(condo.hourly_rate);
-      } catch (err) {
-        setError("Erro ao buscar dados.");
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [user]);
+  const total = days * dailyRate;
 
   const handlePayment = async () => {
     setError(null);
     setSuccess(false);
     setLoading(true);
     try {
-      if (balance < hourlyRate) {
+      if (balance < total) {
         setError("Saldo insuficiente.");
         setLoading(false);
         return;
       }
-      // Chame a API para atualizar o saldo do residente
-      // Aqui, supondo que existe um endpoint PATCH /resident/:id/ para atualizar o saldo
-      const resident = await getResidentByUserId(user.id);
-      if (!resident) {
+      if (!startDate || !endDate) {
+        setError("Selecione o período.");
+        setLoading(false);
+        return;
+      }
+      if (!residentId) {
         setError("Residente não encontrado.");
         setLoading(false);
         return;
       }
-      const response = await fetch(
-        `http://localhost:8000/api/resident/${resident.id}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-          body: JSON.stringify({ balance: balance - hourlyRate }),
-        }
-      );
-      if (!response.ok) {
-        setError("Erro ao processar pagamento.");
-        setLoading(false);
-        return;
-      }
-      setBalance(balance - hourlyRate);
+
+      const newBalance = balance - total;
+
+      await updateResidentBalance(residentId, newBalance);
+
+      const updatedResident = await getResidentByUserId(user.id);
+      setBalance(Number(updatedResident?.balance) || 0);
+
+      console.log(updateResidentBalance);
       setSuccess(true);
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -93,12 +82,17 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
       setLoading(true);
       try {
         const resident = await getResidentByUserId(user.id);
+        console.log("Resident data:", resident);
         if (!resident) {
           setError("Residente não encontrado.");
           setLoading(false);
           return;
         }
         setBalance(Number(resident.balance) || 0);
+        setResidentId(resident.id);
+
+        console.log("Resident ID:", resident.user.id);
+        console.log("User ID:", user.id);
 
         if (!user.condominium) {
           setError("Condomínio não encontrado.");
@@ -106,7 +100,7 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
           return;
         }
         const condo = await getCondominium(user.condominium);
-        setHourlyRate(Number(condo.hourly_rate) || 0);
+        setDailyRate(Number(condo.hourly_rate) || 0);
       } catch (err) {
         setError("Erro ao buscar dados.");
       }
@@ -118,28 +112,47 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
   if (loading) return <Typography>Carregando...</Typography>;
   if (error)
     return (
-      <Paper sx={{ p: 3, mt: 2 }}>
+      <Box sx={{ p: 3, mt: 2 }}>
         <Typography color="error">{error}</Typography>
-      </Paper>
+      </Box>
     );
-
   return (
-    <Paper sx={{ p: 3, mt: 2, maxWidth: 400, mx: "auto" }}>
-      <Typography variant="h6" gutterBottom>
-        Pagamento de Aluguel de Vaga
-      </Typography>
+    <Box sx={{ p: 1, mx: "auto" }}>
       <Typography>
         Saldo atual: <b>R$ {balance.toFixed(2)}</b>
       </Typography>
       <Typography>
-        Valor do aluguel (1 hora): <b>R$ {hourlyRate.toFixed(2)}</b>
+        Valor do aluguel (por dia): <b>R$ {dailyRate.toFixed(2)}</b>
+      </Typography>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBR}>
+        <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+          <DatePicker
+            label="Data de início"
+            value={startDate}
+            onChange={setStartDate}
+            format="dd/MM/yyyy"
+          />
+          <DatePicker
+            label="Data de término"
+            value={endDate}
+            onChange={setEndDate}
+            format="dd/MM/yyyy"
+            minDate={startDate ?? undefined}
+          />
+        </Box>
+      </LocalizationProvider>
+      <Typography sx={{ mt: 2 }}>
+        Dias selecionados: <b>{days}</b>
+      </Typography>
+      <Typography>
+        Total: <b>R$ {total.toFixed(2)}</b>
       </Typography>
       <Button
         variant="contained"
         color="primary"
         sx={{ mt: 2 }}
         onClick={handlePayment}
-        disabled={loading || balance < hourlyRate}
+        disabled={loading || balance < total || !startDate || !endDate}
         fullWidth
       >
         Pagar
@@ -149,7 +162,7 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
           Pagamento realizado com sucesso!
         </Typography>
       )}
-    </Paper>
+    </Box>
   );
 };
 

@@ -10,7 +10,7 @@ import {
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { getResidents, Resident } from "../../api/residents"; // ajuste o caminho
+import { getResidents, Resident } from "../../api/residents";
 
 interface ParkingSpotFormProps {
   initialValues?: {
@@ -35,12 +35,12 @@ const ParkingSpotForm: React.FC<ParkingSpotFormProps> = ({
     initialValues: {
       spot_name: initialValues?.spot_name || "",
       condominium: initialValues?.condominium ?? "",
-      for_rent: initialValues?.for_rent ?? false,
+      for_rent: initialValues?.for_rent ?? true,
       owner: initialValues?.owner ?? null,
     },
     validationSchema: Yup.object({
       spot_name: Yup.string().required("Obrigatório"),
-      owner: Yup.number().nullable().required("Obrigatório"), // se quiser que o campo seja obrigatório
+      owner: Yup.number().nullable().required("Obrigatório"),
       for_rent: Yup.boolean(),
     }),
     onSubmit: (values) => {
@@ -90,7 +90,7 @@ const ParkingSpotForm: React.FC<ParkingSpotFormProps> = ({
             error={formik.touched.owner && Boolean(formik.errors.owner)}
           >
             {residents.map((resident) => (
-              <MenuItem key={resident.id} value={resident.id}>
+              <MenuItem key={resident.user.id} value={resident.user.id}>
                 {resident.user.name}
               </MenuItem>
             ))}
