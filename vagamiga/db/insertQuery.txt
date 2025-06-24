@@ -13,26 +13,29 @@ INSERT INTO condominiums (name, address, hourly_rate) VALUES
 INSERT INTO users (name, email, password, condominium_id, is_admin) VALUES
 ('Ana Souza', 'ana.souza@email.com', 'senha123', 1, true),
 ('Bruno Lima', 'bruno.lima@email.com', 'senha123', 1, false),
-('Carlos Silva', 'carlos.silva@email.com', 'senha123', 2, true),
-('Daniela Costa', 'daniela.costa@email.com', 'senha123', 2, false),
-('Eduardo Ramos', 'eduardo.ramos@email.com', 'senha123', 3, false),
-('Fernanda Alves', 'fernanda.alves@email.com', 'senha123', 3, true),
-('Gustavo Martins', 'gustavo.martins@email.com', 'senha123', 4, false),
-('Helena Dias', 'helena.dias@email.com', 'senha123', 5, false),
-('Igor Pereira', 'igor.pereira@email.com', 'senha123', 5, true),
-('Julia Fernandes', 'julia.fernandes@email.com', 'senha123', 6, false),
+('Carlos Silva', 'carlos.silva@email.com', 'senha123', 1, false),
+('Daniela Costa', 'daniela.costa@email.com', 'senha123', 1, false),
+('Eduardo Ramos', 'eduardo.ramos@email.com', 'senha123', 1, false),
+('Fernanda Alves', 'fernanda.alves@email.com', 'senha123', 1, false),
+('Gustavo Martins', 'gustavo.martins@email.com', 'senha123', 1, false),
+('Helena Dias', 'helena.dias@email.com', 'senha123', 1, false),
+('Igor Pereira', 'igor.pereira@email.com', 'senha123', 1, false),
+('Julia Fernandes', 'julia.fernandes@email.com', 'senha123', 1, false),
 ('Karla Ribeiro', 'karla.ribeiro@email.com', 'senha123', 1, false),
-('Lucas Barros', 'lucas.barros@email.com', 'senha123', 2, false),
-('Mariana Nunes', 'mariana.nunes@email.com', 'senha123', 3, false),
-('Nathan Costa', 'nathan.costa@email.com', 'senha123', 4, false),
-('Olívia Pires', 'olivia.pires@email.com', 'senha123', 6, false);
+('Lucas Barros', 'lucas.barros@email.com', 'senha123', 1, false),
+('Mariana Nunes', 'mariana.nunes@email.com', 'senha123', 1, false),
+('Nathan Costa', 'nathan.costa@email.com', 'senha123', 1, false),
+('Olívia Pires', 'olivia.pires@email.com', 'senha123', 1, false);
 
 INSERT INTO Residents (balance, user_id) VALUES
 (150.00, 2),
+(50.00, 3),
 (200.50, 4),
 (120.00, 5),
+(00.00, 6),
 (90.75, 7),
 (300.00, 8),
+(200.00, 9),
 (80.00, 10),
 (110.00, 11),
 (135.75, 12),
@@ -41,20 +44,20 @@ INSERT INTO Residents (balance, user_id) VALUES
 (75.25, 15);
 
 INSERT INTO ParkingSpots (spot_name, condominium_id, for_rent, owner_id) VALUES
-('A02', 1, true, 7), -- Karla (cond. 1)
+('A02', 1, true, 7), -- Karla
 ('A03', 1, false, 7),
-('C05', 2, true, 8), -- Lucas (cond. 2)
-('E12', 3, false, 9), -- Mariana (cond. 3)
-('E13', 3, true, 9),
-('E14', 3, true, 9),
-('G09', 4, true, 10), -- Nathan (cond. 4)
-('G10', 4, false, 10),
-('K01', 6, true, 11), -- Olívia (cond. 6)
-('K02', 6, true, 11);
+('C05', 1, true, 8), -- Lucas
+('E12', 1, false, 9), -- Mariana
+('E13', 1, true, 9),
+('E14', 1, true, 9),
+('G09', 1, true, 10), -- Nathan
+('G10', 1, false, 10),
+('K01', 1, true, 11), -- Olívia
+('K02', 1, true, 11);
 
 INSERT INTO Reports (landlord_id, tenant_id, spot_id, start_date, end_date, payment_confirmed, amount) VALUES
-(7, 1, 1, '2025-06-11 08:00:00', '2025-06-20 08:00:00', true, 85.00), -- Condomínio 1
-(8, 2, 3, '2025-06-12 09:30:00', '2025-06-22 09:30:00', false, 70.00), -- Condomínio 2
-(9, 3, 5, '2025-06-10 10:00:00', '2025-06-18 10:00:00', true, 95.00), -- Condomínio 3
-(10, 4, 7, '2025-06-13 14:45:00', '2025-06-20 14:45:00', true, 90.00), -- Condomínio 4
-(11, 6, 9, '2025-06-14 16:00:00', '2025-06-24 16:00:00', true, 60.00); -- Condomínio 6
+(7, 1, 1, '2025-06-11 08:00:00', '2025-06-20 08:00:00', true, 85.00),
+(8, 2, 3, '2025-06-12 09:30:00', '2025-06-22 09:30:00', false, 70.00),
+(9, 3, 5, '2025-06-10 10:00:00', '2025-06-18 10:00:00', true, 95.00),
+(10, 4, 7, '2025-06-13 14:45:00', '2025-06-20 14:45:00', true, 90.00),
+(11, 6, 9, '2025-06-14 16:00:00', '2025-06-24 16:00:00', true, 60.00);
