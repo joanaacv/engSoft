@@ -21,7 +21,7 @@ interface ParkingSpotCardProps {
 }
 
 const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
-  spot: { spot_name, condominium, for_rent },
+  spot: { id, spot_name, condominium, for_rent },
   onChangeRent,
   onClaim,
   onEdit,
@@ -29,6 +29,19 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
   isOwner,
 }) => {
   const [openPayment, setOpenPayment] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    setDeleteDialogOpen(false);
+    if (onDelete) {
+      onDelete();
+    }
+  };
+
   return (
     <Card sx={{ width: 300, height: 180 }}>
       <CardContent>
@@ -83,9 +96,40 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
                 </Button>
               )}
               {onDelete && (
-                <Button variant="contained" color="error" onClick={onDelete}>
-                  Excluir
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => setDeleteDialogOpen(true)}
+                  >
+                    Excluir
+                  </Button>
+                  <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+                    <DialogTitle>Confirmar exclusão</DialogTitle>
+                    <DialogContent>
+                      <Typography>
+                        Tem certeza que deseja excluir a vaga <b>{spot_name}</b>
+                        ?
+                      </Typography>
+                      <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button
+                          onClick={handleDeleteCancel}
+                          color="secondary"
+                          style={{ marginRight: 8 }}
+                        >
+                          Cancelar
+                        </Button>
+                        <Button
+                          onClick={handleDeleteConfirm}
+                          variant="contained"
+                          color="error"
+                        >
+                          Excluir
+                        </Button>
+                      </Box>
+                    </DialogContent>
+                  </Dialog>
+                </>
               )}
             </>
           )}
