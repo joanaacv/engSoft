@@ -18,35 +18,3 @@
   },
   "include": ["src"]
 }
-
-// {
-//   "compilerOptions": {
-//     "jsx": "react-jsx",
-//     "moduleResolution": "node",
-//     "esModuleInterop": true,
-//     "baseUrl": "./",
-//     "paths": {
-//       "*": ["node_modules/*"]
-//     }
-//   }
-// }
-
-// {
-//   "compilerOptions": {
-//     "baseUrl": "./",
-//     "target": "ES5",
-//     "jsx": "preserve",
-//     "moduleResolution": "node",
-//     "lib": ["dom", "dom.iterable", "esnext"],
-//     "module": "esnext",
-//     "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     "esModuleInterop": true,
-//     "paths": {
-//       "@/public/*": ["./public/*"],
-//       "@/*": ["./src/*"],
-//       "~/*": ["./*"],
-//       "react": ["./node_modules/@types/react"]
-//     }
-//   }
-// }
