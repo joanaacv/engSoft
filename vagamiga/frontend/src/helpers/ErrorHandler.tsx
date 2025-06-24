@@ -22,7 +22,7 @@ export const handleError = (error: any) => {
     toast.warning(err?.data);
   } else if (err?.status === 401) {
     toast.warning("Você não está autenticado. Por favor, faça login.");
-    window.history.pushState({}, "LoginPage", "/login");
+    window.history.pushState({}, "HomePage", "/");
   } else if (err) {
     toast.warning(err?.data);
   }
