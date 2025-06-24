@@ -67,7 +67,6 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
       const updatedResident = await getResidentByUserId(user.id);
       setBalance(Number(updatedResident?.balance) || 0);
 
-      console.log(updateResidentBalance);
       setSuccess(true);
       if (onSuccess) onSuccess();
     } catch (err) {
@@ -82,7 +81,7 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
       setLoading(true);
       try {
         const resident = await getResidentByUserId(user.id);
-        console.log("Resident data:", resident);
+
         if (!resident) {
           setError("Residente não encontrado.");
           setLoading(false);
@@ -90,9 +89,6 @@ const PaymentModal: React.FC<PaymentProps> = ({ onSuccess }) => {
         }
         setBalance(Number(resident.balance) || 0);
         setResidentId(resident.id);
-
-        console.log("Resident ID:", resident.user.id);
-        console.log("User ID:", user.id);
 
         if (!user.condominium) {
           setError("Condomínio não encontrado.");

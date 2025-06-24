@@ -54,6 +54,11 @@ const ParkingSpotPage: React.FC = () => {
     setOpenForm(true);
   };
 
+  const handleRent = async (id: number, spot: ParkingSpot) => {
+    await updateParkingSpot(id, { for_rent: !spot.for_rent });
+    fetchSpots();
+  };
+
   const handleDelete = async (id: number) => {
     await deleteParkingSpot(id);
     fetchSpots();
@@ -162,9 +167,10 @@ const ParkingSpotPage: React.FC = () => {
                   ? () => handleRentUpdateStatus(spot.id)
                   : undefined
               }
-              onEdit={
-                user?.is_admin || spot.owner === user?.id
-                  ? () => handleEdit(spot)
+              onEdit={user?.is_admin ? () => handleEdit(spot) : undefined}
+              onRent={
+                spot.owner === user?.id
+                  ? () => handleRent(user?.id, spot)
                   : undefined
               }
               onDelete={

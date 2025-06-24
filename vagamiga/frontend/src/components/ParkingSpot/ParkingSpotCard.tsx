@@ -16,6 +16,7 @@ interface ParkingSpotCardProps {
   onChangeRent?: () => void;
   onClaim?: () => void;
   onEdit?: () => void;
+  onRent?: () => void;
   onDelete?: () => void;
   isOwner?: boolean;
 }
@@ -25,6 +26,7 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
   onChangeRent,
   onClaim,
   onEdit,
+  onRent,
   onDelete,
   isOwner,
 }) => {
@@ -86,6 +88,11 @@ const ParkingSpotCard: React.FC<ParkingSpotCardProps> = ({
           {onClaim && !for_rent && isOwner && (
             <Button variant="contained" color="secondary" onClick={onClaim}>
               Reivindicar
+            </Button>
+          )}
+          {onRent && isOwner && (
+            <Button variant="contained" color="primary" onClick={onRent}>
+              {for_rent ? "Tornar indisponível" : "Tornar disponível"}
             </Button>
           )}
           {isOwner && (

@@ -12,7 +12,6 @@ export interface ParkingSpot {
 export const getParkingSpots = async (): Promise<ParkingSpot[]> => {
   try {
     const response = await api.get("/parkingspot/");
-    console.log("Vagas buscadas:", response.data);
     return response.data;
   } catch (error) {
     // Trate o erro conforme necessário, por exemplo:

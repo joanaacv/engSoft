@@ -54,7 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (userData: CreateUser) => {
     setLoading(true);
-    console.log("Register attempt:", userData);
     try {
       await createUser({
         name: userData.name,
@@ -63,10 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         condominium: 1,
         is_admin: userData.is_admin,
       });
-      console.log("User registered successfully");
       setError(null);
     } catch (err: any) {
-      console.log("Register error:", err);
       setError(err?.response?.data?.detail || "Erro ao registrar");
     }
     setLoading(false);
