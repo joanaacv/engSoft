@@ -1,12 +1,13 @@
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   IconButton,
   Paper,
   Table,
@@ -17,19 +18,11 @@ import {
   TableRow,
   TextField,
   Typography,
-  Checkbox,
-  FormControlLabel,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  createUser,
-  deleteUser,
-  getUsers,
-  updateUser,
-  UserResponse,
-} from "../api/users";
-import { useAuth } from "../contexts/AuthContext";
 import { createResident } from "../api/residents";
+import { createUser, getUsers, updateUser, UserResponse } from "../api/users";
+import { useAuth } from "../contexts/AuthContext";
 
 const UsersPage: React.FC = () => {
   const { user } = useAuth();
@@ -76,8 +69,8 @@ const UsersPage: React.FC = () => {
 
         if (!created.is_admin) {
           await createResident({
-          balance: 0,
-          user: created,
+            balance: 0,
+            user: created,
           });
         }
         setUsers([...users, created]);
@@ -125,35 +118,6 @@ const UsersPage: React.FC = () => {
     setEditingUser(null);
   };
 
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<UserResponse | null>(null);
-
-  const handleDeleteClick = (u: UserResponse) => {
-    setUserToDelete(u);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (userToDelete) {
-      await deleteUser(userToDelete.id);
-      setUsers(users.filter((u) => u.id !== userToDelete.id));
-      setDeleteDialogOpen(false);
-      setUserToDelete(null);
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setDeleteDialogOpen(false);
-    setUserToDelete(null);
-  };
-
-  const handleDelete = (id: number) => {
-    const userToDelete = users.find((u) => u.id === id);
-    if (userToDelete) {
-      handleDeleteClick(userToDelete);
-    }
-  };
-
   if (!user) return null;
 
   return (
@@ -195,9 +159,6 @@ const UsersPage: React.FC = () => {
                   <TableCell>
                     <IconButton onClick={() => handleEdit(u)}>
                       <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(u.id)}>
-                      <DeleteIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -292,31 +253,6 @@ const UsersPage: React.FC = () => {
         </DialogContent>
       </Dialog>
       {/* Modal de confirmação de exclusão */}
-      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Confirmar exclusão</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Tem certeza que deseja excluir o usuário <b>{userToDelete?.name}</b>
-            ?
-          </Typography>
-          <Box mt={2} display="flex" justifyContent="flex-end">
-            <Button
-              onClick={handleDeleteCancel}
-              color="secondary"
-              style={{ marginRight: 8 }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              onClick={handleDeleteConfirm}
-              variant="contained"
-              color="error"
-            >
-              Excluir
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 };
